@@ -18,8 +18,8 @@ export default function AdminComplaintsPage() {
       setLoading(true);
       const data = await complaintService.getAllComplaints();
       setComplaints(data || []);
-    } catch (err) {
-      console.warn('Error loading complaints workbench data:', err);
+    } catch {
+      // Continue
     } finally {
       setLoading(false);
     }
@@ -30,37 +30,38 @@ export default function AdminComplaintsPage() {
   }, []);
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-12">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <Link
               href="/admin"
-              className="text-xs text-slate-400 hover:text-white font-semibold inline-flex items-center gap-1.5 transition-colors px-3 py-1 rounded-xl bg-white/5 border border-white/10"
+              className="text-xs text-[#718096] hover:text-[#183B66] font-semibold inline-flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-md bg-white border border-[#E5EAF0]"
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" /> Back to Dashboard
+              <ArrowLeft className="w-3.5 h-3.5 text-[#3978C5]" /> Back to Dashboard
             </Link>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Municipal Complaint Workbench
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
+            Complaints Management
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Search, filter, assign departments, and orchestrate the full resolution lifecycle.
+          <p className="text-xs text-[#718096] mt-0.5">
+            Filter, search, assign municipal departments, and manage the complete resolution lifecycle.
           </p>
         </div>
 
         <Link
           href="/submit"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all border border-cyan-400/30"
+          className="btn-primary text-xs !py-2.5"
         >
-          <PlusCircle className="w-4 h-4 text-cyan-200" /> Log Incident Ticket
+          <PlusCircle className="w-4 h-4" />
+          <span>Report New Issue</span>
         </Link>
       </div>
 
       {/* Main Table */}
       {loading ? (
-        <div className="py-24 text-center text-sm text-slate-400">Loading complaints registry...</div>
+        <div className="py-20 text-center text-xs text-[#718096]">Loading complaints registry...</div>
       ) : (
         <ComplaintTable
           complaints={complaints}

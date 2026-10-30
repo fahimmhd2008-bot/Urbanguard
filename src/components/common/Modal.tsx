@@ -46,29 +46,31 @@ export function Modal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 animate-in fade-in duration-150">
       <div
-        className={`w-full ${widthClasses[maxWidth]} max-h-[92vh] flex flex-col bg-[#0f172a] rounded-3xl shadow-2xl border border-white/15 overflow-hidden text-slate-100 transform transition-all backdrop-blur-2xl`}
+        className={`w-full ${widthClasses[maxWidth]} max-h-[90vh] flex flex-col bg-white rounded-xl shadow-xl border border-[#E5EAF0] overflow-hidden text-[#263445] transform transition-all`}
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-[#090d16]/80">
+        <div className="px-6 py-4 border-b border-[#E5EAF0] flex items-center justify-between bg-[#F8FAFC]">
           <div>
-            <h3 className="text-lg font-extrabold text-white tracking-tight">{title}</h3>
-            {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
+            <h3 className="text-base font-bold text-[#183B66]">{title}</h3>
+            {subtitle && <p className="text-xs text-[#718096] mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-lg text-[#718096] hover:text-[#183B66] hover:bg-[#E5EAF0] transition-colors"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Content body */}
-        <div className="px-6 py-6 overflow-y-auto flex-1">{children}</div>
+        {/* Scrollable Content Body */}
+        <div className="p-6 overflow-y-auto flex-1 space-y-4">
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -70,13 +70,13 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
   );
 
   return (
-    <div className="bg-[#0f172a]/80 rounded-3xl border border-white/10 overflow-hidden shadow-2xl backdrop-blur-xl">
+    <div className="card-clean overflow-hidden bg-white border border-[#E5EAF0]">
       {/* Search & Filter Bar */}
-      <div className="p-5 border-b border-white/10 bg-[#090d16]/70 space-y-4">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5">
+      <div className="p-4 sm:p-5 border-b border-[#E5EAF0] bg-[#F8FAFC] space-y-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Search Box */}
-          <div className="relative w-full sm:w-96">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <div className="relative w-full sm:w-80">
+            <Search className="w-4 h-4 text-[#A0AEC0] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchTerm}
@@ -84,33 +84,33 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              placeholder="Search reference, issue title, or street..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/10 text-xs bg-[#0b0f19] text-white placeholder-slate-500 focus:border-cyan-500/60 focus:outline-none transition-all"
+              placeholder="Search reference, issue, or street..."
+              className="w-full pl-9 pr-3.5 py-2 rounded-lg border border-[#E5EAF0] text-xs bg-white text-[#263445] placeholder-[#A0AEC0] focus:border-[#3978C5] focus:outline-none transition-colors"
             />
           </div>
 
           {/* Sort Selector */}
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
-            <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5 whitespace-nowrap">
-              <ArrowUpDown className="w-3.5 h-3.5 text-cyan-400" /> Sort:
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <span className="text-xs font-semibold text-[#718096] flex items-center gap-1 whitespace-nowrap">
+              <ArrowUpDown className="w-3.5 h-3.5 text-[#3978C5]" /> Sort:
             </span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="px-3.5 py-2 rounded-xl border border-white/10 text-xs bg-[#0b0f19] text-slate-200 font-semibold focus:border-cyan-500/60 focus:outline-none"
+              className="px-3 py-1.5 rounded-lg border border-[#E5EAF0] text-xs bg-white text-[#263445] font-medium focus:border-[#3978C5] focus:outline-none"
             >
               <option value="date_desc">Newest First</option>
               <option value="date_asc">Oldest First</option>
-              <option value="priority_desc">Highest Priority (Score)</option>
-              <option value="priority_asc">Lowest Priority (Score)</option>
+              <option value="priority_desc">Highest Priority</option>
+              <option value="priority_asc">Lowest Priority</option>
             </select>
           </div>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2.5 pt-1 text-xs">
-          <span className="text-slate-400 font-semibold flex items-center gap-1.5">
-            <Filter className="w-3.5 h-3.5 text-cyan-400" /> Filters:
+        {/* Filter Dropdowns */}
+        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <span className="text-[#718096] font-semibold flex items-center gap-1">
+            <Filter className="w-3.5 h-3.5 text-[#3978C5]" /> Filter:
           </span>
 
           {/* Category */}
@@ -120,7 +120,7 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
               setCategoryFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-3 py-1.5 rounded-xl border border-white/10 text-xs bg-[#0b0f19] text-slate-300 font-medium focus:border-cyan-500/60 focus:outline-none"
+            className="px-2.5 py-1.5 rounded-md border border-[#E5EAF0] text-xs bg-white text-[#263445] font-medium focus:border-[#3978C5] focus:outline-none"
           >
             <option value="ALL">All Categories</option>
             <option value="Roads">Roads & Potholes</option>
@@ -139,7 +139,7 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
               setStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-3 py-1.5 rounded-xl border border-white/10 text-xs bg-[#0b0f19] text-slate-300 font-medium focus:border-cyan-500/60 focus:outline-none"
+            className="px-2.5 py-1.5 rounded-md border border-[#E5EAF0] text-xs bg-white text-[#263445] font-medium focus:border-[#3978C5] focus:outline-none"
           >
             <option value="ALL">All Statuses</option>
             <option value="SUBMITTED">SUBMITTED</option>
@@ -156,13 +156,13 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
               setPriorityFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-3 py-1.5 rounded-xl border border-white/10 text-xs bg-[#0b0f19] text-slate-300 font-medium focus:border-cyan-500/60 focus:outline-none"
+            className="px-2.5 py-1.5 rounded-md border border-[#E5EAF0] text-xs bg-white text-[#263445] font-medium focus:border-[#3978C5] focus:outline-none"
           >
             <option value="ALL">All Priorities</option>
-            <option value="Critical">Critical (≥80)</option>
-            <option value="High">High (60-79)</option>
-            <option value="Medium">Medium (35-59)</option>
-            <option value="Low">Low (&lt;35)</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
           </select>
 
           {(searchTerm || categoryFilter !== 'ALL' || statusFilter !== 'ALL' || priorityFilter !== 'ALL') && (
@@ -174,7 +174,7 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
                 setPriorityFilter('ALL');
                 setCurrentPage(1);
               }}
-              className="text-xs text-cyan-400 hover:text-cyan-300 font-bold ml-auto transition-colors"
+              className="text-xs text-[#3978C5] hover:text-[#183B66] font-semibold ml-auto transition-colors"
             >
               Reset Filters
             </button>
@@ -186,21 +186,21 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs">
           <thead>
-            <tr className="bg-[#090d16]/90 border-b border-white/10 text-slate-400 uppercase tracking-wider font-bold">
-              <th className="py-3.5 px-4">Reference</th>
-              <th className="py-3.5 px-4">Complaint Title & Location</th>
-              <th className="py-3.5 px-4">Category</th>
-              <th className="py-3.5 px-4">Priority</th>
-              <th className="py-3.5 px-4">Status</th>
-              <th className="py-3.5 px-4">Assigned Dept</th>
-              <th className="py-3.5 px-4">Date</th>
-              <th className="py-3.5 px-4 text-right">Action</th>
+            <tr className="bg-[#F8FAFC] border-b border-[#E5EAF0] text-[#718096] uppercase tracking-wider font-bold">
+              <th className="py-3 px-4">Reference</th>
+              <th className="py-3 px-4">Complaint Title & Location</th>
+              <th className="py-3 px-4">Category</th>
+              <th className="py-3 px-4">Priority</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4">Assigned Dept</th>
+              <th className="py-3 px-4">Date</th>
+              <th className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-[#E5EAF0]">
             {paginatedComplaints.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-16 text-center text-slate-500">
+                <td colSpan={8} className="py-12 text-center text-[#718096]">
                   No complaints match your active filter criteria.
                 </td>
               </tr>
@@ -209,47 +209,47 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
                 <tr
                   key={comp.id}
                   onClick={() => onSelectComplaint(comp)}
-                  className="hover:bg-white/5 cursor-pointer transition-colors"
+                  className="hover:bg-[#F8FAFC] cursor-pointer transition-colors"
                 >
-                  <td className="py-4 px-4 font-mono font-bold text-cyan-300 whitespace-nowrap">
+                  <td className="py-3 px-4 font-mono font-bold text-[#183B66] whitespace-nowrap">
                     {comp.reference_number}
                   </td>
-                  <td className="py-4 px-4 max-w-xs">
-                    <p className="font-bold text-white truncate text-sm" title={comp.title}>
+                  <td className="py-3 px-4 max-w-xs">
+                    <p className="font-bold text-[#263445] truncate text-xs" title={comp.title}>
                       {comp.title}
                     </p>
-                    <p className="text-[11px] text-slate-400 truncate mt-0.5" title={comp.location_name}>
+                    <p className="text-[11px] text-[#718096] truncate mt-0.5" title={comp.location_name}>
                       📍 {comp.location_name}
                     </p>
                   </td>
-                  <td className="py-4 px-4 whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1.5 font-medium text-slate-300">
-                      <CategoryIcon category={comp.category} className="w-3.5 h-3.5 text-cyan-400" />
-                      {comp.category}
+                  <td className="py-3 px-4 whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1.5 font-medium text-[#718096]">
+                      <CategoryIcon category={comp.category} className="w-3.5 h-3.5 text-[#3978C5]" />
+                      <span>{comp.category}</span>
                     </span>
                   </td>
-                  <td className="py-4 px-4 whitespace-nowrap">
-                    <PriorityBadge level={comp.priority_level} score={comp.priority_score} />
+                  <td className="py-3 px-4 whitespace-nowrap">
+                    <PriorityBadge level={comp.priority_level} score={comp.priority_score} size="sm" />
                   </td>
-                  <td className="py-4 px-4 whitespace-nowrap">
-                    <StatusBadge status={comp.status} />
+                  <td className="py-3 px-4 whitespace-nowrap">
+                    <StatusBadge status={comp.status} size="sm" />
                   </td>
-                  <td className="py-4 px-4 max-w-[160px] truncate text-slate-300 font-medium" title={comp.assigned_department || 'Unassigned'}>
-                    {comp.assigned_department || <span className="text-slate-500 italic">Unassigned</span>}
+                  <td className="py-3 px-4 max-w-[150px] truncate text-[#718096]" title={comp.assigned_department || 'Unassigned'}>
+                    {comp.assigned_department || <span className="text-[#A0AEC0] italic">Unassigned</span>}
                   </td>
-                  <td className="py-4 px-4 whitespace-nowrap text-slate-400 font-mono text-[11px]">
+                  <td className="py-3 px-4 whitespace-nowrap text-[#718096] text-[11px]">
                     {formatDate(comp.created_at)}
                   </td>
-                  <td className="py-4 px-4 text-right whitespace-nowrap">
+                  <td className="py-3 px-4 text-right whitespace-nowrap">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onSelectComplaint(comp);
                       }}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-cyan-600 text-white font-bold text-xs transition-colors shadow-md"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EBF3FC] text-[#183B66] hover:bg-[#D0E2F6] font-semibold text-xs transition-colors"
                     >
-                      <Eye className="w-3.5 h-3.5" />
-                      Workbench
+                      <Eye className="w-3 h-3 text-[#3978C5]" />
+                      <span>Inspect</span>
                     </button>
                   </td>
                 </tr>
@@ -260,27 +260,27 @@ export function ComplaintTable({ complaints, onSelectComplaint }: Props) {
       </div>
 
       {/* Pagination Footer */}
-      <div className="p-4 border-t border-white/10 bg-[#090d16]/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <div className="p-3.5 border-t border-[#E5EAF0] bg-[#F8FAFC] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#718096]">
         <div>
-          Showing <strong className="text-white">{paginatedComplaints.length}</strong> of{' '}
-          <strong className="text-white">{processedComplaints.length}</strong> incidents
+          Showing <strong>{paginatedComplaints.length}</strong> of{' '}
+          <strong>{processedComplaints.length}</strong> records
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="p-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-30 text-white transition-colors"
+            className="p-1 rounded border border-[#E5EAF0] bg-white hover:bg-[#F8FAFC] disabled:opacity-40 text-[#263445] transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="font-semibold text-slate-300">
+          <span className="font-medium text-[#263445]">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="p-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-30 text-white transition-colors"
+            className="p-1 rounded border border-[#E5EAF0] bg-white hover:bg-[#F8FAFC] disabled:opacity-40 text-[#263445] transition-colors"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

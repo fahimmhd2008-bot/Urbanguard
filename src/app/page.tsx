@@ -4,27 +4,24 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  ShieldCheck,
+  Shield,
   PlusCircle,
   Search,
   ArrowRight,
-  Sparkles,
   MapPin,
   CheckCircle2,
   Clock,
-  Layers,
-  AlertTriangle,
   Car,
   Droplets,
   Trash2,
   Zap,
   Building2,
   ShieldAlert,
-  Activity,
-  ArrowUpRight,
-  Sliders,
-  Cpu,
-  Eye,
+  SlidersHorizontal,
+  Layers,
+  Sparkles,
+  Users,
+  CheckCheck,
 } from 'lucide-react';
 import { complaintService } from '@/lib/data/complaintService';
 import { Complaint } from '@/types/civic';
@@ -43,8 +40,6 @@ export default function LandingPage() {
     resolutionRate: 16.7,
   });
 
-  const [loadingFeed, setLoadingFeed] = useState(true);
-
   useEffect(() => {
     let mounted = true;
 
@@ -53,24 +48,16 @@ export default function LandingPage() {
       .then((res) => {
         if (mounted && res) setMetrics(res);
       })
-      .catch((err) => {
-        console.warn('Failed to load metrics:', err);
-      });
+      .catch(() => {});
 
     complaintService
       .getAllComplaints()
       .then((res) => {
         if (mounted && Array.isArray(res)) {
-          // Pick 3 high-impact complaints for the live feed showcase
           setFeaturedComplaints(res.slice(0, 3));
         }
       })
-      .catch((err) => {
-        console.warn('Failed to load featured complaints:', err);
-      })
-      .finally(() => {
-        if (mounted) setLoadingFeed(false);
-      });
+      .catch(() => {});
 
     return () => {
       mounted = false;
@@ -87,444 +74,272 @@ export default function LandingPage() {
   const categories = [
     {
       name: 'Roads & Potholes',
-      desc: 'Deep craters, structural asphalt breakdown, and hazardous speed bumps.',
+      desc: 'Structural asphalt damage, dangerous potholes, and broken curbs.',
       icon: Car,
-      gradient: 'from-amber-500/20 to-orange-500/5',
-      iconColor: 'text-amber-400',
-      borderColor: 'hover:border-amber-500/40',
-      activeCount: '12 active',
+      activeCount: '12 reports',
     },
     {
       name: 'Water & Drainage',
-      desc: 'Submerged roads, contaminated mains, burst water lines, and sewage spills.',
+      desc: 'Water pipeline leaks, sewer overflows, and localized drainage blocks.',
       icon: Droplets,
-      gradient: 'from-cyan-500/20 to-blue-500/5',
-      iconColor: 'text-cyan-400',
-      borderColor: 'hover:border-cyan-500/40',
-      activeCount: '8 active',
+      activeCount: '8 reports',
     },
     {
       name: 'Waste Management',
-      desc: 'Commercial dumpster overflow, hazardous littering, and health risks.',
+      desc: 'Uncollected refuse, overflowing commercial bins, and littering.',
       icon: Trash2,
-      gradient: 'from-emerald-500/20 to-teal-500/5',
-      iconColor: 'text-emerald-400',
-      borderColor: 'hover:border-emerald-500/40',
-      activeCount: '7 active',
+      activeCount: '7 reports',
     },
     {
       name: 'Electricity & Lighting',
-      desc: 'Dark pedestrian alleys, arcing transformers, and exposed high-voltage wiring.',
+      desc: 'Damaged streetlights, dangling wiring, and power outages.',
       icon: Zap,
-      gradient: 'from-yellow-500/20 to-amber-500/5',
-      iconColor: 'text-yellow-400',
-      borderColor: 'hover:border-yellow-500/40',
-      activeCount: '6 active',
+      activeCount: '6 reports',
     },
     {
       name: 'Public Infrastructure',
-      desc: 'Damaged footbridges, buckled sidewalks, and fractured retention walls.',
+      desc: 'Damaged footpaths, broken traffic signals, and park hazards.',
       icon: Building2,
-      gradient: 'from-indigo-500/20 to-purple-500/5',
-      iconColor: 'text-indigo-400',
-      borderColor: 'hover:border-indigo-500/40',
-      activeCount: '5 active',
+      activeCount: '5 reports',
     },
     {
-      name: 'Public Safety Hazards',
-      desc: 'Missing manhole covers, unguarded trenches, and waterlogged electric boxes.',
+      name: 'Public Safety',
+      desc: 'Missing storm drain covers, unsafe structures, and pedestrian risks.',
       icon: ShieldAlert,
-      gradient: 'from-rose-500/20 to-red-500/5',
-      iconColor: 'text-rose-400',
-      borderColor: 'hover:border-rose-500/40',
-      activeCount: '4 critical',
-    },
-  ];
-
-  const steps = [
-    {
-      step: '01',
-      title: 'CAPTURE',
-      desc: 'High-precision GPS geolocation pin, photographic evidence upload, and structured citizen input.',
-      badge: 'Multimodal Input',
-    },
-    {
-      step: '02',
-      title: 'UNDERSTAND',
-      desc: 'Real-time NLP engine extracts 4-part facts (What, Where, Impact, Action) and maps municipal jurisdiction.',
-      badge: 'NLP Classifier',
-    },
-    {
-      step: '03',
-      title: 'REVEAL',
-      desc: 'Haversine clustering detects spatial hotspots and groups duplicates to eliminate backlogs.',
-      badge: 'Spatial Clustering',
-    },
-    {
-      step: '04',
-      title: 'ACT',
-      desc: 'Deterministic 0-100 explainable scoring determines urgency based on safety risk, impact, and frequency.',
-      badge: 'Explainable AI',
-    },
-    {
-      step: '05',
-      title: 'RESOLVE',
-      desc: 'Work orders dispatch directly to department crews with live public status telemetry.',
-      badge: 'Verified Outcome',
+      activeCount: '4 reports',
     },
   ];
 
   return (
-    <div className="space-y-24 sm:space-y-32 pb-20">
-      {/* HERO SECTION */}
-      <section className="relative pt-6 sm:pt-14 pb-12 sm:pb-20">
-        {/* Ambient radial blur behind hero */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-600/25 via-cyan-500/20 to-indigo-600/20 blur-[120px] rounded-full pointer-events-none -z-10" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Hero Column */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Top Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950/70 border border-blue-500/30 text-blue-300 text-xs font-semibold shadow-lg shadow-blue-900/30 backdrop-blur-md">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-              </span>
-              <span>Autonomous Municipal Action Platform • v2.4</span>
+    <div className="space-y-16 sm:space-y-24">
+      
+      {/* 1. HERO SECTION */}
+      <section className="pt-4 sm:pt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          {/* Left Hero Content */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EBF3FC] text-[#183B66] text-xs font-semibold border border-[#D0E2F6]">
+              <Shield className="w-3.5 h-3.5 text-[#3978C5]" />
+              <span>Official Municipal Action Platform</span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
-              Turning Citizen Voice into{' '}
-              <span className="text-gradient-blue">Intelligent Public Action</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#183B66] tracking-tight leading-[1.12]">
+              Your City. Your Voice. Real Action.
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
-              No more forgotten complaints or bureaucratic black holes. CivicAI classifies, groups duplicates, calculates explainable priority scores, and coordinates municipal crews in real time.
+            <p className="text-base sm:text-lg text-[#718096] max-w-xl leading-relaxed">
+              Report civic problems, let AI organize and prioritize them, and track progress towards a better community.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            {/* Clear Primary & Secondary CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
               <Link
                 href="/submit"
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-cyan-400/30"
+                className="btn-primary text-sm !py-3 !px-6"
               >
-                <PlusCircle className="w-5 h-5 text-cyan-200" />
-                Report Civic Incident
+                <PlusCircle className="w-4 h-4" />
+                <span>Report an Issue</span>
               </Link>
 
               <Link
-                href="/admin"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#131b2e]/80 hover:bg-[#1a253f] text-slate-200 hover:text-white font-semibold text-sm border border-white/10 hover:border-white/20 transition-all duration-200 backdrop-blur-md"
+                href="/my-complaints"
+                className="btn-secondary text-sm !py-3 !px-6"
               >
-                <Cpu className="w-4 h-4 text-purple-400" />
-                Admin Command Center
+                <Search className="w-4 h-4 text-[#718096]" />
+                <span>Track My Complaint</span>
               </Link>
             </div>
 
-            {/* Quick Live Tracking Bar */}
-            <div className="pt-4 max-w-lg">
-              <form onSubmit={handleTrackSubmit} className="relative flex items-center group">
-                <Search className="w-4 h-4 text-slate-400 absolute left-4 group-focus-within:text-cyan-400 transition-colors" />
+            {/* Direct Reference Number Search */}
+            <form onSubmit={handleTrackSubmit} className="pt-2 max-w-md">
+              <div className="relative flex items-center">
                 <input
                   type="text"
+                  placeholder="Enter reference number (e.g. CIVIC-2026-1001)"
                   value={referenceQuery}
                   onChange={(e) => setReferenceQuery(e.target.value)}
-                  placeholder="Enter Reference Number (e.g. CIVIC-2026-1001)"
-                  className="w-full pl-11 pr-28 py-3.5 rounded-2xl bg-[#0e1526]/90 border border-white/10 text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-cyan-500/60 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-inner"
+                  className="w-full bg-white border border-[#E5EAF0] rounded-lg pl-3.5 pr-20 py-2 text-xs text-[#263445] placeholder-[#A0AEC0] focus:outline-none focus:border-[#3978C5] shadow-sm"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-xl text-xs font-bold tracking-wide transition-all shadow-md shadow-blue-600/20"
+                  className="absolute right-1 px-3 py-1 bg-[#183B66] hover:bg-[#122d4f] text-white text-xs font-semibold rounded-md transition-colors"
                 >
                   Track
                 </button>
-              </form>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 mt-2.5">
-                <span>Try active demos:</span>
-                <button
-                  type="button"
-                  onClick={() => setReferenceQuery('CIVIC-2026-1001')}
-                  className="text-cyan-400 hover:text-cyan-300 font-mono underline underline-offset-2"
-                >
-                  CIVIC-2026-1001
-                </button>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={() => setReferenceQuery('CIVIC-2026-1006')}
-                  className="text-cyan-400 hover:text-cyan-300 font-mono underline underline-offset-2"
-                >
-                  CIVIC-2026-1006
-                </button>
               </div>
-            </div>
+            </form>
           </div>
 
-          {/* Right Hero Column: Live Simulated Intelligence Card */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-3xl bg-gradient-to-b from-[#131b2e] to-[#0c1220] p-6 border border-white/15 shadow-2xl shadow-black/80 backdrop-blur-2xl">
-              {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                      Live AI Triage Engine
-                    </h4>
-                    <p className="text-[10px] text-slate-400">Deterministic scoring active</p>
-                  </div>
-                </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
-                  SCORE 88/100 • CRITICAL
-                </span>
-              </div>
-
-              {/* Simulated Card Content */}
-              <div className="py-5 space-y-4">
+          {/* Right Visual Preview of Complaint Tracking & Dashboard */}
+          <div className="lg:col-span-5">
+            <div className="card-clean p-6 space-y-5 bg-white shadow-sm border border-[#E5EAF0]">
+              <div className="flex items-center justify-between border-b border-[#E5EAF0] pb-4">
                 <div>
-                  <span className="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
-                    Incident Digest
+                  <span className="text-[11px] font-bold text-[#718096] uppercase tracking-wider block">
+                    Active Case File
                   </span>
-                  <h3 className="text-sm font-semibold text-slate-100 mt-0.5">
-                    Submerged Electrical Conduit & Sewage Overflow
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                    Main sewer line burst flooding North Metro subway entrance; water has breached an underground commercial power transformer box.
-                  </p>
-                </div>
-
-                {/* Score Breakdown Bars */}
-                <div className="p-3.5 rounded-2xl bg-[#090d16]/80 border border-white/5 space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5 text-[11px]">
-                      <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-                      Public Safety Risk
-                    </span>
-                    <span className="font-mono font-bold text-rose-400">38 / 40</span>
-                  </div>
-                  <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-gradient-to-r from-orange-500 to-rose-500 h-full rounded-full w-[95%]" />
-                  </div>
-
-                  <div className="flex items-center justify-between text-slate-300 pt-1">
-                    <span className="flex items-center gap-1.5 text-[11px]">
-                      <Activity className="w-3.5 h-3.5 text-amber-400" />
-                      Infrastructure Impact
-                    </span>
-                    <span className="font-mono font-bold text-amber-400">22 / 25</span>
-                  </div>
-                  <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full w-[88%]" />
-                  </div>
-                </div>
-
-                {/* Routed Department Pill */}
-                <div className="flex items-center justify-between pt-1 text-xs">
-                  <span className="text-slate-400 text-[11px]">Auto-Routed Department:</span>
-                  <span className="px-2.5 py-1 rounded-xl bg-blue-500/15 text-blue-300 border border-blue-500/30 font-semibold text-[11px]">
-                    Municipal Water & Sewage
+                  <span className="font-mono text-sm font-bold text-[#183B66]">
+                    CIVIC-2026-1001
                   </span>
                 </div>
+                <StatusBadge status="IN PROGRESS" size="sm" />
               </div>
 
-              {/* Live Status Footer */}
-              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
-                <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Crew Dispatched (ETA: 22m)</span>
-                </div>
-                <Link
-                  href="/track/CIVIC-2026-1006"
-                  className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold"
-                >
-                  View Details <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Live Municipal Metrics Strip */}
-        <div className="mt-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 rounded-3xl bg-[#0f172a]/70 border border-white/10 backdrop-blur-xl shadow-2xl">
-            <div className="p-3 text-center">
-              <span className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tight">
-                {metrics.total}
-              </span>
-              <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">
-                Logged Incidents
-              </p>
-            </div>
-            <div className="p-3 text-center border-l border-white/10">
-              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight">
-                {metrics.resolved}
-              </span>
-              <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">
-                Verified Outcomes
-              </p>
-            </div>
-            <div className="p-3 text-center border-l border-white/10">
-              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tracking-tight">
-                {metrics.inProgress}
-              </span>
-              <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">
-                Active Field Crews
-              </p>
-            </div>
-            <div className="p-3 text-center border-l border-white/10">
-              <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono tracking-tight">
-                {metrics.critical}
-              </span>
-              <p className="text-xs text-slate-400 mt-1 font-semibold uppercase tracking-wider">
-                Critical Safety Alerts
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CLOSED-LOOP GOVERNANCE (How It Works) */}
-      <section className="space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/60 px-3.5 py-1 rounded-full border border-cyan-500/30">
-            <Layers className="w-3.5 h-3.5" />
-            Closed-Loop Governance Pipeline
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            How CivicAI Delivers Verifiable Action
-          </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            From the instant a citizen pins an issue to the final post-repair verification, every step is transparent, explainable, and accountable.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {steps.map((st) => (
-            <div
-              key={st.step}
-              className="p-5 rounded-3xl bg-[#0f172a]/60 border border-white/10 backdrop-blur-md hover:border-cyan-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
-            >
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-2xl font-black text-cyan-400 group-hover:scale-110 transition-transform">
-                    {st.step}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/5 text-slate-300 border border-white/10">
-                    {st.badge}
-                  </span>
+                <h3 className="font-bold text-[#263445] text-sm">
+                  Dangerous 2-foot crater pothole near Metro Pillar 42
+                </h3>
+                <p className="text-xs text-[#718096] mt-1 leading-relaxed">
+                  High vehicle speed arterial lane with exposed rebar hazard.
+                </p>
+                <div className="flex items-center gap-1.5 text-xs text-[#718096] mt-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#3978C5]" />
+                  <span>MG Road / Ring Road Junction</span>
                 </div>
-                <h3 className="font-bold text-white text-base mb-2 tracking-wide">{st.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{st.desc}</p>
               </div>
+
+              {/* Resolution Progress Bar */}
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between text-xs font-semibold text-[#183B66]">
+                  <span>Resolution Lifecycle</span>
+                  <span className="text-[#3978C5]">Step 4 of 5</span>
+                </div>
+                <div className="w-full bg-[#E5EAF0] h-2 rounded-full overflow-hidden">
+                  <div className="bg-[#3978C5] h-full rounded-full w-4/5" />
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-[#718096] pt-0.5">
+                  <span>Submitted</span>
+                  <span>Review</span>
+                  <span>Assigned</span>
+                  <span className="font-bold text-[#3978C5]">In Progress</span>
+                  <span>Resolved</span>
+                </div>
+              </div>
+
+              {/* Triage Info */}
+              <div className="bg-[#F8FAFC] rounded-lg p-3 border border-[#E5EAF0] flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[#718096] block">Assigned Dept</span>
+                  <span className="font-semibold text-[#183B66]">Road Infrastructure</span>
+                </div>
+                <PriorityBadge level="Critical" score={88} size="sm" />
+              </div>
+
+              <Link
+                href="/track/CIVIC-2026-1001"
+                className="w-full btn-secondary text-xs !py-2 justify-center"
+              >
+                <span>View Full Public Audit Trail</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#718096]" />
+              </Link>
             </div>
-          ))}
+          </div>
         </div>
       </section>
 
-      {/* RECENT LIVE COMPLAINT FEED PREVIEW */}
-      {featuredComplaints.length > 0 && (
-        <section className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                Real-Time City Pulse
-              </span>
-              <h2 className="text-2xl font-extrabold text-white mt-1">Live Civic Complaints</h2>
-            </div>
-            <Link
-              href="/my-complaints"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              View All 42 Incidents <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {featuredComplaints.map((c) => (
-              <div
-                key={c.id}
-                className="p-5 rounded-3xl bg-[#0f172a]/60 border border-white/10 hover:border-white/20 transition-all duration-200 backdrop-blur-md flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-slate-400">
-                      {c.reference_number}
-                    </span>
-                    <PriorityBadge level={c.priority_level} score={c.priority_score} />
-                  </div>
-                  <h3 className="font-bold text-white text-sm line-clamp-1">{c.title}</h3>
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {c.description}
-                  </p>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400 pt-1">
-                    <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                    <span className="truncate">{c.location_name}</span>
-                  </div>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-white/5 flex items-center justify-between">
-                  <StatusBadge status={c.status} />
-                  <Link
-                    href={`/track/${c.reference_number}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-cyan-400 hover:text-cyan-300"
-                  >
-                    Track <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ISSUE CATEGORIES SECTION */}
-      <section className="space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-950/60 px-3.5 py-1 rounded-full border border-blue-500/30">
-            Municipal Scope
+      {/* 2. HOW URBANGURAD WORKS */}
+      <section id="how-it-works" className="space-y-8">
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
+            Clear Four-Step Process
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Six Core Civic Domains
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
+            How Urbangurad Works
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            Our autonomous NLP models map incoming citizen reports directly to the municipal departments responsible for remediation.
+          <p className="text-sm text-[#718096]">
+            Designed for transparency, fairness, and verifiable public outcomes from report to resolution.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="card-clean p-6 space-y-3">
+            <div className="w-9 h-9 rounded-lg bg-[#EBF3FC] text-[#183B66] flex items-center justify-center font-bold text-sm">
+              1
+            </div>
+            <h3 className="font-bold text-[#183B66] text-base">Report an Issue</h3>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Submit your report in under a minute with a description, location, and optional photo. No complex paperwork required.
+            </p>
+          </div>
+
+          <div className="card-clean p-6 space-y-3">
+            <div className="w-9 h-9 rounded-lg bg-[#EBF3FC] text-[#183B66] flex items-center justify-center font-bold text-sm">
+              2
+            </div>
+            <h3 className="font-bold text-[#183B66] text-base">AI Triage & Prioritize</h3>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Urbangurad analyzes safety risk, public impact, and detects duplicates to calculate an explainable priority score.
+            </p>
+          </div>
+
+          <div className="card-clean p-6 space-y-3">
+            <div className="w-9 h-9 rounded-lg bg-[#EBF3FC] text-[#183B66] flex items-center justify-center font-bold text-sm">
+              3
+            </div>
+            <h3 className="font-bold text-[#183B66] text-base">Municipal Dispatch</h3>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Issues are automatically matched and dispatched directly to the responsible public works teams without bureaucratic delays.
+            </p>
+          </div>
+
+          <div className="card-clean p-6 space-y-3">
+            <div className="w-9 h-9 rounded-lg bg-[#EBF3FC] text-[#183B66] flex items-center justify-center font-bold text-sm">
+              4
+            </div>
+            <h3 className="font-bold text-[#183B66] text-base">Track to Resolution</h3>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Follow every status update live with a transparent milestone log and receive confirmation when field work is verified.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. MAIN CIVIC COMPLAINT CATEGORIES */}
+      <section className="space-y-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
+              Municipal Services
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66] mt-1">
+              Main Complaint Categories
+            </h2>
+            <p className="text-sm text-[#718096] mt-1">
+              Select an area to quickly report recurring civic issues in your neighborhood.
+            </p>
+          </div>
+          <Link
+            href="/submit"
+            className="btn-secondary text-xs !py-2 self-start sm:self-auto"
+          >
+            <span>Start a Report</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {categories.map((cat) => {
             const Icon = cat.icon;
             return (
               <div
                 key={cat.name}
-                className={`p-6 rounded-3xl bg-gradient-to-b ${cat.gradient} border border-white/10 ${cat.borderColor} backdrop-blur-xl shadow-lg transition-all duration-300 flex flex-col justify-between group`}
+                className="card-clean p-5 flex items-start gap-4 hover:border-[#CBD5E1] cursor-pointer"
+                onClick={() => router.push(`/submit?category=${encodeURIComponent(cat.name)}`)}
               >
-                <div className="space-y-3">
+                <div className="p-2.5 rounded-lg bg-[#F1F5F9] text-[#183B66] shrink-0">
+                  <Icon className="w-5 h-5 text-[#3978C5]" />
+                </div>
+                <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <div className={`p-3 rounded-2xl bg-white/5 border border-white/10 ${cat.iconColor} group-hover:scale-110 transition-transform`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold text-slate-400 px-2 py-0.5 rounded-full bg-white/5 border border-white/5">
+                    <h3 className="font-bold text-[#183B66] text-sm">{cat.name}</h3>
+                    <span className="text-[11px] font-semibold text-[#718096]">
                       {cat.activeCount}
                     </span>
                   </div>
-                  <h3 className="font-bold text-white text-lg tracking-wide group-hover:text-cyan-300 transition-colors">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs text-slate-300/80 leading-relaxed">{cat.desc}</p>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-white/5">
-                  <Link
-                    href="/submit"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors"
-                  >
-                    Report in this category <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  <p className="text-xs text-[#718096] leading-relaxed">
+                    {cat.desc}
+                  </p>
                 </div>
               </div>
             );
@@ -532,59 +347,189 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* EXPLAINABLE AI ARCHITECTURE SECTION */}
-      <section>
-        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-[#131b2e] to-[#090d16] border border-white/15 shadow-2xl relative overflow-hidden">
-          <div className="max-w-3xl space-y-4">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/70 px-3.5 py-1 rounded-full border border-cyan-500/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              Explainable AI Governance
+      {/* 4. HOW AI HELPS PRIORITIZE COMPLAINTS */}
+      <section className="card-clean p-8 sm:p-12 space-y-8 bg-white border border-[#E5EAF0]">
+        <div className="max-w-2xl space-y-2">
+          <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
+            Explainable Intelligence
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
+            How AI Helps Prioritize Complaints
+          </h2>
+          <p className="text-sm text-[#718096] leading-relaxed">
+            Rather than relying on arbitrary queues or manual sorting, Urbangurad calculates a transparent 0–100 priority score using four objective municipal factors:
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0] space-y-2">
+            <span className="text-xs font-extrabold text-[#183B66] block">
+              1. Safety Risk (0–40 pts)
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight">
-              Deterministic Math, Not a Black-Box Chatbot
-            </h2>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              Civic decisions require public trust. CivicAI pairs robust NLP with verifiable, reproducible backend scoring. Every decision can be audited, explained to a citizen, and tracked in municipal records.
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Detects hazard indicators like exposed electrical wires, deep craters, or structural collapse risks.
             </p>
+          </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-4">
-              <div className="p-4 rounded-2xl bg-[#090d16]/80 border border-white/10 space-y-1.5">
-                <strong className="text-cyan-300 text-sm block">4-Factor Priority Score</strong>
-                <span className="text-slate-400 leading-relaxed">
-                  Calculates Safety Risk (0-40), Public Impact (0-25), Urgency (0-20), and Duplicate Cluster Frequency (0-15) for total score 0-100.
-                </span>
-              </div>
-              <div className="p-4 rounded-2xl bg-[#090d16]/80 border border-white/10 space-y-1.5">
-                <strong className="text-cyan-300 text-sm block">Multi-Factor Duplicate Filter</strong>
-                <span className="text-slate-400 leading-relaxed">
-                  Identifies duplicate complaints using text token similarity, Haversine geo-distance, and category matching without discarding citizen voices.
-                </span>
-              </div>
-              <div className="p-4 rounded-2xl bg-[#090d16]/80 border border-white/10 space-y-1.5">
-                <strong className="text-cyan-300 text-sm block">Audited Priority Overrides</strong>
-                <span className="text-slate-400 leading-relaxed">
-                  Municipal officials cannot secretly change scores. Any override requires an audit-logged administrative justification.
-                </span>
-              </div>
-              <div className="p-4 rounded-2xl bg-[#090d16]/80 border border-white/10 space-y-1.5">
-                <strong className="text-cyan-300 text-sm block">Spatial Hotspot Intelligence</strong>
-                <span className="text-slate-400 leading-relaxed">
-                  Aggregates neighborhood complaints into density clusters to guide capital budget planning and recurring drainage overhauls.
-                </span>
-              </div>
-            </div>
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0] space-y-2">
+            <span className="text-xs font-extrabold text-[#183B66] block">
+              2. Public Impact (0–25 pts)
+            </span>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Assesses the size of the affected population based on proximity to schools, hospitals, transit, and main roads.
+            </p>
+          </div>
 
-            <div className="pt-6">
-              <Link
-                href="/admin"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all border border-blue-400/30"
-              >
-                Open Municipal Command Center <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0] space-y-2">
+            <span className="text-xs font-extrabold text-[#183B66] block">
+              3. Urgency & Time (0–20 pts)
+            </span>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Evaluates the rate of deterioration, weather sensitivity, and unaddressed backlog age.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0] space-y-2">
+            <span className="text-xs font-extrabold text-[#183B66] block">
+              4. Recurrence & Duplicates (0–15 pts)
+            </span>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Clusters similar neighborhood reports together to identify systemic infrastructure hotspots.
+            </p>
           </div>
         </div>
       </section>
+
+      {/* 5. RECENT CITIZEN REPORTS SHOWCASE */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
+              Transparency Feed
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66] mt-1">
+              Recent Citizen Reports
+            </h2>
+          </div>
+          <Link
+            href="/my-complaints"
+            className="text-xs font-semibold text-[#3978C5] hover:text-[#183B66] flex items-center gap-1"
+          >
+            <span>View All Reports</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {featuredComplaints.map((c) => (
+            <div
+              key={c.id}
+              className="card-clean p-5 flex flex-col justify-between space-y-4"
+            >
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[#718096]">
+                    {c.reference_number}
+                  </span>
+                  <PriorityBadge level={c.priority_level} score={c.priority_score} size="sm" />
+                </div>
+                <h3 className="font-bold text-[#183B66] text-sm line-clamp-1">{c.title}</h3>
+                <p className="text-xs text-[#718096] line-clamp-2 leading-relaxed">
+                  {c.description}
+                </p>
+                <div className="flex items-center gap-1.5 text-xs text-[#718096]">
+                  <MapPin className="w-3.5 h-3.5 text-[#3978C5] shrink-0" />
+                  <span className="truncate">{c.location_name}</span>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-[#E5EAF0] flex items-center justify-between">
+                <StatusBadge status={c.status} size="sm" />
+                <Link
+                  href={`/track/${c.reference_number}`}
+                  className="text-xs font-semibold text-[#3978C5] hover:text-[#183B66] flex items-center gap-1"
+                >
+                  <span>Track</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. COMMUNITY IMPACT STATISTICS */}
+      <section className="card-clean p-8 sm:p-10 bg-white border border-[#E5EAF0]">
+        <div className="text-center max-w-xl mx-auto space-y-2 mb-8">
+          <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
+            Verifiable Outcomes
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
+            Community Impact Statistics
+          </h2>
+          <p className="text-sm text-[#718096]">
+            Real-time public works performance across municipal sectors.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0]">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#183B66] block">
+              {metrics.total}
+            </span>
+            <span className="text-xs font-semibold text-[#718096] mt-1 block">
+              Incidents Logged
+            </span>
+          </div>
+
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0]">
+            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-600 block">
+              {metrics.resolved}
+            </span>
+            <span className="text-xs font-semibold text-[#718096] mt-1 block">
+              Verified Resolved
+            </span>
+          </div>
+
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0]">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#3978C5] block">
+              4.2h
+            </span>
+            <span className="text-xs font-semibold text-[#718096] mt-1 block">
+              Avg. First Response
+            </span>
+          </div>
+
+          <div className="p-4 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0]">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#183B66] block">
+              89%
+            </span>
+            <span className="text-xs font-semibold text-[#718096] mt-1 block">
+              Citizen Satisfaction
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. BOTTOM CALL TO ACTION */}
+      <section className="rounded-xl p-8 sm:p-12 bg-[#183B66] text-white text-center space-y-4">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+          Make a Difference in Your Neighborhood
+        </h2>
+        <p className="text-sm text-slate-200 max-w-lg mx-auto leading-relaxed">
+          Report a public issue today. Your submission is instantly organized, prioritized, and tracked through to resolution.
+        </p>
+        <div className="pt-2">
+          <Link
+            href="/submit"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#183B66] hover:bg-slate-100 font-bold text-sm rounded-lg shadow-sm transition-colors"
+          >
+            <PlusCircle className="w-4 h-4 text-[#3978C5]" />
+            <span>Submit a Civic Report</span>
+          </Link>
+        </div>
+      </section>
+
     </div>
   );
 }

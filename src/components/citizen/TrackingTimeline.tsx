@@ -8,7 +8,7 @@ import {
   Wrench,
   CheckCheck,
   AlertCircle,
-  Building,
+  Building2,
 } from 'lucide-react';
 import { ComplaintStatus, ComplaintStatusHistory } from '@/types/civic';
 import { formatDate } from '@/lib/utils/formatters';
@@ -45,28 +45,30 @@ export function TrackingTimeline({
   const currentIndex = getStageIndex(currentStatus);
 
   return (
-    <div className="bg-[#0f172a]/80 rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="card-clean p-6 sm:p-8 space-y-6 bg-white border border-[#E5EAF0]">
+      <div className="flex items-center justify-between border-b border-[#E5EAF0] pb-4">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/60 px-3 py-0.5 rounded-full border border-cyan-500/30">
-            Resolution Telemetry
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#3978C5] bg-[#EBF3FC] px-2.5 py-0.5 rounded-full inline-block">
+            Resolution Lifecycle
           </span>
-          <h3 className="font-extrabold text-white text-xl mt-1">Milestone Lifecycle</h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Immutable audit milestones verified by municipal dispatch logs
+          <h3 className="font-extrabold text-[#183B66] text-lg mt-1">
+            Progress Timeline
+          </h3>
+          <p className="text-xs text-[#718096]">
+            Transparent municipal dispatch and remediation milestones
           </p>
         </div>
         <div className="text-right">
-          <span className="text-xs text-slate-400 block">Report Logged</span>
-          <span className="text-xs font-mono font-bold text-slate-200">{formatDate(createdAt)}</span>
+          <span className="text-[11px] text-[#718096] block">Submitted On</span>
+          <span className="text-xs font-semibold text-[#183B66]">{formatDate(createdAt)}</span>
         </div>
       </div>
 
       {/* Progress Horizontal Bar on larger screens */}
-      <div className="relative mb-6 px-4 hidden sm:block">
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -translate-y-1/2 -z-0" />
+      <div className="relative my-6 px-4 hidden sm:block">
+        <div className="absolute top-1/2 left-0 w-full h-1 bg-[#E5EAF0] -translate-y-1/2 -z-0" />
         <div
-          className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 -translate-y-1/2 -z-0 transition-all duration-500"
+          className="absolute top-1/2 left-0 h-1 bg-[#3978C5] -translate-y-1/2 -z-0 transition-all duration-300"
           style={{ width: `${Math.max(5, (currentIndex / (STAGES.length - 1)) * 100)}%` }}
         />
 
@@ -79,19 +81,19 @@ export function TrackingTimeline({
             return (
               <div key={stage.status} className="flex flex-col items-center">
                 <div
-                  className={`w-11 h-11 rounded-2xl flex items-center justify-center border transition-all duration-300 ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all ${
                     isCompleted
-                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-lg shadow-cyan-500/20'
+                      ? 'bg-emerald-50 border-emerald-300 text-emerald-600'
                       : isCurrent
-                      ? 'bg-blue-600 border-cyan-400 text-white ring-4 ring-cyan-500/20 shadow-xl shadow-blue-500/30 font-bold'
-                      : 'bg-[#090d16] border-white/10 text-slate-500'
+                      ? 'bg-[#183B66] border-[#183B66] text-white shadow-sm ring-4 ring-[#EBF3FC]'
+                      : 'bg-white border-[#CBD5E1] text-[#A0AEC0]'
                   }`}
                 >
-                  {isCompleted ? <CheckCircle2 className="w-5 h-5 text-cyan-300" /> : <Icon className="w-5 h-5" />}
+                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <Icon className="w-4 h-4" />}
                 </div>
                 <span
-                  className={`mt-2.5 text-xs font-bold tracking-wide ${
-                    isCurrent ? 'text-cyan-400' : isCompleted ? 'text-slate-200' : 'text-slate-500'
+                  className={`mt-2 text-xs font-semibold ${
+                    isCurrent ? 'text-[#183B66]' : isCompleted ? 'text-emerald-700' : 'text-[#718096]'
                   }`}
                 >
                   {stage.label}
@@ -102,60 +104,60 @@ export function TrackingTimeline({
         </div>
       </div>
 
-      {/* Assignment & Department Banner */}
+      {/* Department Assignment Info */}
       {assignedDepartment && (
-        <div className="p-4 bg-[#090d16]/90 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="p-3.5 bg-[#F8FAFC] rounded-lg border border-[#E5EAF0] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-              <Building className="w-4 h-4" />
+            <div className="w-7 h-7 rounded-md bg-[#EBF3FC] flex items-center justify-center text-[#183B66]">
+              <Building2 className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-slate-400">Assigned Department: </span>
-              <span className="text-white font-bold">{assignedDepartment}</span>
-              {assignedTo && <span className="text-cyan-400 ml-2 font-medium">• Crew Lead: {assignedTo}</span>}
+              <span className="text-[#718096]">Assigned Department: </span>
+              <strong className="text-[#183B66] font-semibold">{assignedDepartment}</strong>
+              {assignedTo && <span className="text-[#718096] ml-2">• Lead: <strong>{assignedTo}</strong></span>}
             </div>
           </div>
           {resolvedAt && (
-            <div className="text-emerald-400 font-bold flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
-              <CheckCheck className="w-4 h-4" /> Remediation Verified: {formatDate(resolvedAt)}
+            <div className="text-emerald-700 font-semibold flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200">
+              <CheckCheck className="w-3.5 h-3.5 text-emerald-600" /> Resolved on: {formatDate(resolvedAt)}
             </div>
           )}
         </div>
       )}
 
       {/* Verified Status Audit Log */}
-      <div>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3.5">
-          Municipal Field Log History ({history.length})
+      <div className="space-y-3 pt-2">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-[#183B66]">
+          Status Updates ({history.length})
         </h4>
 
         {history.length === 0 ? (
-          <p className="text-xs text-slate-500 italic">No field logs recorded yet.</p>
+          <p className="text-xs text-[#718096] italic">No updates recorded yet.</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {history.map((log) => (
               <div
                 key={log.id}
-                className="p-3.5 rounded-2xl bg-[#090d16]/60 border border-white/5 flex items-start justify-between gap-4 text-xs"
+                className="p-3 rounded-lg bg-[#F8FAFC] border border-[#E5EAF0] flex items-start justify-between gap-3 text-xs"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-white uppercase tracking-wider text-[11px]">
+                    <span className="font-bold text-[#183B66] text-xs">
                       {log.new_status}
                     </span>
                     {log.updated_by && (
-                      <span className="text-slate-400 text-[11px]">
-                        by <strong className="text-slate-300 font-medium">{log.updated_by}</strong>
+                      <span className="text-[#718096] text-[11px]">
+                        by {log.updated_by}
                       </span>
                     )}
                   </div>
                   {(log.public_message || log.internal_note) && (
-                    <p className="text-slate-400 text-xs leading-relaxed">
+                    <p className="text-[#718096] text-xs leading-relaxed">
                       {log.public_message || log.internal_note}
                     </p>
                   )}
                 </div>
-                <span className="text-[11px] text-slate-500 font-mono shrink-0">
+                <span className="text-[11px] text-[#718096] shrink-0">
                   {formatDate(log.created_at)}
                 </span>
               </div>

@@ -4,17 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  ShieldCheck,
+  Shield,
   PlusCircle,
-  FileText,
+  FileSearch,
   LayoutDashboard,
-  MapPin,
-  Copy,
   Menu,
   X,
   UserCheck,
-  Building,
-  Sparkles,
+  Building2,
+  LogIn,
 } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
 import { UserRole } from '@/types/civic';
@@ -23,9 +21,10 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState<UserRole>('citizen');
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('civicai_current_role') as UserRole;
+    const saved = localStorage.getItem('urbangurad_current_role') as UserRole;
     if (saved) {
       setCurrentRole(saved);
     } else if (pathname.startsWith('/admin')) {
@@ -35,178 +34,242 @@ export function Navbar() {
 
   const toggleRole = (newRole: UserRole) => {
     setCurrentRole(newRole);
-    localStorage.setItem('civicai_current_role', newRole);
+    localStorage.setItem('urbangurad_current_role', newRole);
   };
 
-  const navLinks = [
-    { href: '/submit', label: 'Report Issue', icon: PlusCircle, citizenOnly: true },
-    { href: '/my-complaints', label: 'My Complaints', icon: FileText, citizenOnly: true },
-    { href: '/admin', label: 'Overview', icon: LayoutDashboard, adminOnly: true },
-    { href: '/admin/complaints', label: 'Complaints', icon: FileText, adminOnly: true },
-    { href: '/admin/map', label: 'Hotspot Map', icon: MapPin, adminOnly: true },
-    { href: '/admin/duplicates', label: 'Duplicates', icon: Copy, adminOnly: true },
-  ];
-
-  const visibleLinks = navLinks.filter((link) => {
-    if (currentRole === 'citizen' && link.adminOnly) return false;
-    if (currentRole === 'admin' && link.citizenOnly) return false;
-    return true;
-  });
-
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0b0f19]/85 backdrop-blur-xl border-b border-white/10 text-white shadow-xl shadow-black/40">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-[#E5EAF0] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo Branding */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="relative">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300">
-                <div className="w-full h-full bg-[#090d16] rounded-[14px] flex items-center justify-center">
-                  <ShieldCheck className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
-                </div>
-              </div>
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-              </span>
+        <div className="flex items-center justify-between h-16 sm:h-18">
+          
+          {/* Urbangurad Brand Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-lg bg-[#183B66] text-white flex items-center justify-center shadow-sm">
+              <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl tracking-tight text-white font-sans">
-                  Civic<span className="text-gradient-blue font-black">AI</span>
-                </span>
-                <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-900/60 to-cyan-900/60 text-cyan-300 border border-cyan-500/30">
-                  <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
-                  Autonomous
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium tracking-wide hidden sm:block">
-                Complaints to Action Engine
+              <span className="font-extrabold text-xl tracking-tight text-[#183B66]">
+                Urban<span className="text-[#3978C5]">gurad</span>
+              </span>
+              <p className="text-[10px] text-[#718096] font-medium leading-none hidden sm:block">
+                Municipal Action Platform
               </p>
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all duration-200 ${
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
                 pathname === '/'
-                  ? 'text-white bg-white/10 shadow-inner border border-white/10'
-                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+                  ? 'text-[#183B66] bg-[#F1F5F9]'
+                  : 'text-[#718096] hover:text-[#183B66] hover:bg-[#F8FAFC]'
               }`}
             >
               Home
             </Link>
 
-            {visibleLinks.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all duration-200 ${
-                    isActive
-                      ? 'text-white bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-600/30 border border-blue-400/30'
-                      : 'text-slate-300 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-200' : 'text-slate-400'}`} />
-                  {item.label}
-                </Link>
-              );
-            })}
+            <Link
+              href="/#how-it-works"
+              className="px-3 py-1.5 rounded-md text-xs font-semibold text-[#718096] hover:text-[#183B66] hover:bg-[#F8FAFC] transition-colors"
+            >
+              How It Works
+            </Link>
+
+            <Link
+              href="/submit"
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                pathname === '/submit'
+                  ? 'text-[#183B66] bg-[#F1F5F9]'
+                  : 'text-[#718096] hover:text-[#183B66] hover:bg-[#F8FAFC]'
+              }`}
+            >
+              Report an Issue
+            </Link>
+
+            <Link
+              href="/my-complaints"
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                pathname.startsWith('/my-complaints')
+                  ? 'text-[#183B66] bg-[#F1F5F9]'
+                  : 'text-[#718096] hover:text-[#183B66] hover:bg-[#F8FAFC]'
+              }`}
+            >
+              Track My Complaint
+            </Link>
+
+            <Link
+              href="/admin"
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+                pathname.startsWith('/admin')
+                  ? 'text-[#183B66] bg-[#F1F5F9]'
+                  : 'text-[#718096] hover:text-[#183B66] hover:bg-[#F8FAFC]'
+              }`}
+            >
+              Admin Dashboard
+            </Link>
           </nav>
 
-          {/* Right Controls: Role Switcher & Notifications */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
-            {/* Quick Demo Role Switcher */}
-            <div className="flex items-center bg-[#131b2e] p-1 rounded-2xl border border-white/10 shadow-inner">
+          {/* Right Action Bar */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* Quick Role Switcher */}
+            <div className="hidden lg:flex items-center bg-[#F1F5F9] p-0.5 rounded-lg border border-[#E5EAF0]">
               <button
                 onClick={() => toggleRole('citizen')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
                   currentRole === 'citizen'
-                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-blue-500/20'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white text-[#183B66] shadow-sm'
+                    : 'text-[#718096] hover:text-[#263445]'
                 }`}
                 title="Switch to Citizen View"
               >
                 <UserCheck className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Citizen</span>
+                <span>Citizen</span>
               </button>
               <button
                 onClick={() => toggleRole('admin')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
                   currentRole === 'admin'
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-white text-[#183B66] shadow-sm'
+                    : 'text-[#718096] hover:text-[#263445]'
                 }`}
-                title="Switch to Municipal Administrator View"
+                title="Switch to Municipal Admin View"
               >
-                <Building className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Admin</span>
+                <Building2 className="w-3.5 h-3.5" />
+                <span>Admin</span>
               </button>
             </div>
 
-            {/* Notification Bell */}
+            {/* Notifications */}
             <NotificationDropdown />
 
-            {/* Primary Action Button */}
+            {/* Sign In Button */}
+            <button
+              onClick={() => setShowSignInModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#183B66] hover:bg-[#F1F5F9] rounded-lg transition-colors border border-transparent hover:border-[#E5EAF0]"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sign In</span>
+            </button>
+
+            {/* Primary CTA */}
             {currentRole === 'citizen' ? (
               <Link
                 href="/submit"
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-bold tracking-wide shadow-lg shadow-blue-600/30 hover:shadow-cyan-500/40 transition-all duration-200 border border-cyan-400/30"
+                className="btn-primary text-xs !py-1.5 !px-3.5"
               >
-                <PlusCircle className="w-4 h-4 text-cyan-200" />
-                Report Issue
+                <PlusCircle className="w-3.5 h-3.5" />
+                <span>Report Issue</span>
               </Link>
             ) : (
               <Link
                 href="/admin"
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold tracking-wide shadow-lg shadow-indigo-600/30 transition-all duration-200 border border-purple-400/30"
+                className="btn-primary text-xs !py-1.5 !px-3.5"
               >
-                <LayoutDashboard className="w-4 h-4 text-purple-200" />
-                Dashboard
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>Dashboard</span>
               </Link>
             )}
 
-            {/* Mobile menu trigger */}
+            {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-slate-900 border border-white/10"
-              aria-label="Toggle mobile menu"
+              className="md:hidden p-2 text-[#718096] hover:text-[#183B66] hover:bg-[#F1F5F9] rounded-lg"
+              aria-label="Toggle navigation"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-white/10 space-y-2 bg-[#0b0f19] px-2 rounded-b-2xl animate-in slide-in-from-top duration-200">
+          <div className="md:hidden py-3 border-t border-[#E5EAF0] space-y-1 bg-white">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#263445] hover:bg-[#F5F7FA]"
             >
               Home
             </Link>
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:bg-white/5"
-              >
-                <item.icon className="w-4 h-4 text-cyan-400" />
-                {item.label}
-              </Link>
-            ))}
+            <Link
+              href="/#how-it-works"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#718096] hover:bg-[#F5F7FA]"
+            >
+              How It Works
+            </Link>
+            <Link
+              href="/submit"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#718096] hover:bg-[#F5F7FA]"
+            >
+              Report an Issue
+            </Link>
+            <Link
+              href="/my-complaints"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#718096] hover:bg-[#F5F7FA]"
+            >
+              Track My Complaint
+            </Link>
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-sm font-semibold text-[#718096] hover:bg-[#F5F7FA]"
+            >
+              Admin Dashboard
+            </Link>
           </div>
         )}
       </div>
+
+      {/* Clean Sign In Modal */}
+      {showSignInModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 border border-[#E5EAF0] space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-[#183B66]" />
+                <h3 className="font-bold text-[#183B66] text-base">Urbangurad Access</h3>
+              </div>
+              <button
+                onClick={() => setShowSignInModal(false)}
+                className="text-[#718096] hover:text-[#263445] p-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs text-[#718096] leading-relaxed">
+              Sign in with your municipal or citizen account to manage verified records.
+            </p>
+            <div className="space-y-2.5 pt-2">
+              <button
+                onClick={() => {
+                  toggleRole('citizen');
+                  setShowSignInModal(false);
+                }}
+                className="w-full btn-secondary text-xs !py-2.5 justify-start gap-2.5"
+              >
+                <UserCheck className="w-4 h-4 text-[#3978C5]" />
+                <span>Continue as Citizen User</span>
+              </button>
+              <button
+                onClick={() => {
+                  toggleRole('admin');
+                  setShowSignInModal(false);
+                }}
+                className="w-full btn-primary text-xs !py-2.5 justify-start gap-2.5"
+              >
+                <Building2 className="w-4 h-4 text-white" />
+                <span>Continue as Municipal Administrator</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

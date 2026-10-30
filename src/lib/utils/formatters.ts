@@ -46,36 +46,36 @@ export function getPriorityStyles(level: PriorityLevel): {
   switch (level) {
     case 'Critical':
       return {
-        badgeBg: 'bg-rose-500/15 text-rose-300',
-        badgeText: 'text-rose-400',
-        badgeBorder: 'border-rose-500/30',
-        dotColor: 'bg-rose-500',
-        barColor: 'bg-rose-500',
+        badgeBg: 'bg-red-50 text-red-700',
+        badgeText: 'text-red-700',
+        badgeBorder: 'border-red-200',
+        dotColor: 'bg-red-500',
+        barColor: 'bg-red-500',
       };
     case 'High':
       return {
-        badgeBg: 'bg-amber-500/15 text-amber-300',
-        badgeText: 'text-amber-400',
-        badgeBorder: 'border-amber-500/30',
-        dotColor: 'bg-amber-400',
+        badgeBg: 'bg-amber-50 text-amber-800',
+        badgeText: 'text-amber-800',
+        badgeBorder: 'border-amber-200',
+        dotColor: 'bg-amber-500',
         barColor: 'bg-amber-500',
       };
     case 'Medium':
       return {
-        badgeBg: 'bg-blue-500/15 text-blue-300',
-        badgeText: 'text-blue-400',
-        badgeBorder: 'border-blue-500/30',
-        dotColor: 'bg-blue-400',
+        badgeBg: 'bg-blue-50 text-blue-700',
+        badgeText: 'text-blue-700',
+        badgeBorder: 'border-blue-200',
+        dotColor: 'bg-blue-500',
         barColor: 'bg-blue-500',
       };
     case 'Low':
     default:
       return {
-        badgeBg: 'bg-slate-800 text-slate-300',
-        badgeText: 'text-slate-400',
-        badgeBorder: 'border-slate-700',
+        badgeBg: 'bg-slate-100 text-slate-700',
+        badgeText: 'text-slate-700',
+        badgeBorder: 'border-slate-200',
         dotColor: 'bg-slate-400',
-        barColor: 'bg-slate-500',
+        barColor: 'bg-slate-400',
       };
   }
 }
@@ -88,17 +88,17 @@ export function getStatusStyles(status: ComplaintStatus): {
 } {
   switch (status) {
     case 'SUBMITTED':
-      return { bg: 'bg-slate-800/80', text: 'text-slate-300', border: 'border-slate-700', stepNumber: 1 };
+      return { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', stepNumber: 1 };
     case 'UNDER REVIEW':
-      return { bg: 'bg-purple-500/15', text: 'text-purple-300', border: 'border-purple-500/30', stepNumber: 2 };
+      return { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', stepNumber: 2 };
     case 'ASSIGNED':
-      return { bg: 'bg-blue-500/15', text: 'text-blue-300', border: 'border-blue-500/30', stepNumber: 3 };
+      return { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', stepNumber: 3 };
     case 'IN PROGRESS':
-      return { bg: 'bg-amber-500/15', text: 'text-amber-300', border: 'border-amber-500/30', stepNumber: 4 };
+      return { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', stepNumber: 4 };
     case 'RESOLVED':
-      return { bg: 'bg-emerald-500/15', text: 'text-emerald-300', border: 'border-emerald-500/30', stepNumber: 5 };
+      return { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', stepNumber: 5 };
     default:
-      return { bg: 'bg-slate-800/80', text: 'text-slate-300', border: 'border-slate-700', stepNumber: 1 };
+      return { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200', stepNumber: 1 };
   }
 }
 

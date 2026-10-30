@@ -22,71 +22,51 @@ export function MetricCard({
 }: Props) {
   const variantStyles = {
     blue: {
-      gradient: 'from-blue-500/15 to-blue-600/5',
-      border: 'border-blue-500/30',
-      iconBg: 'bg-blue-500/10 text-cyan-400 border-blue-500/30',
-      valColor: 'text-white',
+      iconBg: 'bg-[#EBF3FC] text-[#3978C5] border-[#D0E2F6]',
     },
     amber: {
-      gradient: 'from-amber-500/15 to-orange-500/5',
-      border: 'border-amber-500/30',
-      iconBg: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-      valColor: 'text-white',
+      iconBg: 'bg-amber-50 text-amber-700 border-amber-200',
     },
     emerald: {
-      gradient: 'from-emerald-500/15 to-teal-500/5',
-      border: 'border-emerald-500/30',
-      iconBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-      valColor: 'text-white',
+      iconBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     },
     red: {
-      gradient: 'from-rose-500/15 to-red-500/5',
-      border: 'border-rose-500/30',
-      iconBg: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-      valColor: 'text-white',
+      iconBg: 'bg-red-50 text-red-700 border-red-200',
     },
     purple: {
-      gradient: 'from-purple-500/15 to-indigo-500/5',
-      border: 'border-purple-500/30',
-      iconBg: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-      valColor: 'text-white',
+      iconBg: 'bg-purple-50 text-purple-700 border-purple-200',
     },
     slate: {
-      gradient: 'from-slate-800/40 to-slate-900/40',
-      border: 'border-white/10',
-      iconBg: 'bg-white/5 text-slate-300 border-white/10',
-      valColor: 'text-white',
+      iconBg: 'bg-slate-100 text-slate-700 border-slate-200',
     },
   };
 
-  const style = variantStyles[variant];
+  const current = variantStyles[variant] || variantStyles.blue;
 
   return (
-    <div
-      className={`p-5 rounded-3xl border ${style.border} bg-gradient-to-b ${style.gradient} bg-[#0f172a]/80 shadow-xl backdrop-blur-xl flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-2xl`}
-    >
-      <div className="flex items-center justify-between mb-3.5">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-          {title}
-        </span>
-        <div className={`p-2.5 rounded-2xl border ${style.iconBg} shadow-inner`}>
-          <Icon className="w-5 h-5" />
+    <div className="card-clean p-5 flex flex-col justify-between space-y-3 bg-white border border-[#E5EAF0]">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-[#718096]">{title}</span>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${current.iconBg}`}>
+          <Icon className="w-4 h-4" />
         </div>
       </div>
 
       <div>
-        <div className="flex items-baseline justify-between gap-2">
-          <span className={`text-3xl font-black font-mono tracking-tight ${style.valColor}`}>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
             {value}
           </span>
           {badge && (
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-300">
+            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
               {badge}
             </span>
           )}
         </div>
         {subtitle && (
-          <p className="text-xs text-slate-400 mt-1.5 font-medium leading-relaxed">{subtitle}</p>
+          <p className="text-[11px] text-[#718096] mt-1">
+            {subtitle}
+          </p>
         )}
       </div>
     </div>
