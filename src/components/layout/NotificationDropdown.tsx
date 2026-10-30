@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Bell, Check, ExternalLink, Info, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { NotificationItem } from '@/types/civic';
+import type { NotificationItem } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { formatRelativeTime } from '@/lib/utils/formatters';
 

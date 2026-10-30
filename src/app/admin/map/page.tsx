@@ -4,11 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
-  MapPin,
   Layers,
   ChevronRight,
 } from 'lucide-react';
-import { Complaint, HotspotCluster } from '@/types/civic';
+import type { Complaint, HotspotCluster } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { identifyHotspots } from '@/lib/utils/geo';
 import { CivicMap } from '@/components/map/CivicMap';

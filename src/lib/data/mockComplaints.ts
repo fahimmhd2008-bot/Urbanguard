@@ -1,4 +1,5 @@
-import { Complaint, ComplaintAIAnalysis, ComplaintStatusHistory } from '@/types/civic';
+import type { Complaint, ComplaintStatusHistory } from '@/types/civic';
+import { ComplaintAIAnalysis } from '@/types/civic';
 
 export const INITIAL_COMPLAINTS: Complaint[] = [
   // --- CLUSTER 1: NORTH AVENUE / METRO PILLAR (Roads & Safety Hazard - Critical Hotspot) ---

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Complaint, HotspotCluster, PriorityLevel } from '@/types/civic';
+import type { Complaint, HotspotCluster} from '@/types/civic';
+import { PriorityLevel } from '@/types/civic';
 import { identifyHotspots } from '@/lib/utils/geo';
 import { getPriorityStyles } from '@/lib/utils/formatters';
 
@@ -39,21 +40,21 @@ export function CivicMap({
 
   // Filter complaints
   const filteredComplaints = complaints.filter((c) => {
-    if (selectedCategory !== 'ALL' && c.category !== selectedCategory) return false;
-    if (selectedPriority !== 'ALL' && c.priority_level !== selectedPriority) return false;
+    if (selectedCategory !== 'ALL' && c.category !== selectedCategory) {return false;}
+    if (selectedPriority !== 'ALL' && c.priority_level !== selectedPriority) {return false;}
     return typeof c.latitude === 'number' && typeof c.longitude === 'number';
   });
 
   const hotspots: HotspotCluster[] = identifyHotspots(complaints);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !mapContainerRef.current) return;
+    if (typeof window === 'undefined' || !mapContainerRef.current) {return;}
 
     let isMounted = true;
 
     // Dynamically import Leaflet
     import('leaflet').then((L) => {
-      if (!isMounted || !mapContainerRef.current) return;
+      if (!isMounted || !mapContainerRef.current) {return;}
 
       // Import Leaflet CSS dynamically if not yet in head
       if (!document.getElementById('leaflet-css')) {
@@ -112,13 +113,13 @@ export function CivicMap({
 
   // Update Markers & Hotspots whenever complaints, filters, or selection change
   useEffect(() => {
-    if (!mapLoaded || !mapInstanceRef.current) return;
+    if (!mapLoaded || !mapInstanceRef.current) {return;}
 
     import('leaflet').then((L) => {
       const markersLayer = markersLayerRef.current as { clearLayers: () => void; addLayer: (layer: unknown) => void };
       const hotspotsLayer = hotspotsLayerRef.current as { clearLayers: () => void; addLayer: (layer: unknown) => void };
 
-      if (!markersLayer || !hotspotsLayer) return;
+      if (!markersLayer || !hotspotsLayer) {return;}
 
       markersLayer.clearLayers();
       hotspotsLayer.clearLayers();
@@ -151,9 +152,9 @@ export function CivicMap({
         const prioStyle = getPriorityStyles(comp.priority_level);
         
         let markerBg = '#64748b'; // Low
-        if (comp.priority_level === 'Critical') markerBg = '#dc2626';
-        else if (comp.priority_level === 'High') markerBg = '#f97316';
-        else if (comp.priority_level === 'Medium') markerBg = '#2563eb';
+        if (comp.priority_level === 'Critical') {markerBg = '#dc2626';}
+        else if (comp.priority_level === 'High') {markerBg = '#f97316';}
+        else if (comp.priority_level === 'Medium') {markerBg = '#2563eb';}
 
         const size = isSelected ? 32 : 24;
         const borderWidth = isSelected ? 3 : 2;

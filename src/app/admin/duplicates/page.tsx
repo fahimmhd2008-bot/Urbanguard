@@ -8,9 +8,10 @@ import {
   CheckCircle2,
   XCircle,
 } from 'lucide-react';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
-import { detectDuplicates, DuplicateCandidate } from '@/lib/ai/duplicateDetector';
+import type { DuplicateCandidate } from '@/lib/ai/duplicateDetector';
+import { detectDuplicates } from '@/lib/ai/duplicateDetector';
 import { ComplaintDetailModal } from '@/components/admin/ComplaintDetailModal';
 import { PriorityBadge } from '@/components/common/PriorityBadge';
 
@@ -91,7 +92,7 @@ export default function AdminDuplicatesPage() {
   };
 
   const filteredPairs = pairs.filter((p) => {
-    if (filterStatus === 'ALL') return true;
+    if (filterStatus === 'ALL') {return true;}
     return p.reviewStatus === filterStatus;
   });
 

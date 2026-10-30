@@ -15,7 +15,7 @@ import {
   Copy,
   Check,
 } from 'lucide-react';
-import { ComplaintCategory } from '@/types/civic';
+import type { ComplaintCategory } from '@/types/civic';
 import { classifyComplaint } from '@/lib/ai/classifier';
 import { calculatePriorityScore } from '@/lib/ai/priorityScorer';
 import { complaintService } from '@/lib/data/complaintService';
@@ -182,7 +182,7 @@ export function ComplaintForm() {
             Report Submitted Successfully
           </span>
           <h2 className="text-2xl font-extrabold text-[#183B66]">
-            Incident Registered with Urbangurad
+            Incident Registered with Urbanguard
           </h2>
           <p className="text-xs text-[#718096] max-w-sm mx-auto leading-relaxed">
             Your complaint has been queued for municipal dispatch. Save your reference number to track its progress.
@@ -262,7 +262,7 @@ export function ComplaintForm() {
           Report a Civic Problem
         </h2>
         <p className="text-xs text-[#718096] mt-0.5">
-          Please fill out the form below. Urbangurad will automatically categorize the issue and route it to the appropriate municipal department.
+          Please fill out the form below. Urbanguard will automatically categorize the issue and route it to the appropriate municipal department.
         </p>
       </div>
 

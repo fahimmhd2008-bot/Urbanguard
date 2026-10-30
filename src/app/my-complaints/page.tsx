@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { PlusCircle, Search, FileText } from 'lucide-react';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { ComplaintCard } from '@/components/citizen/ComplaintCard';
 
@@ -20,11 +20,11 @@ export default function MyComplaintsPage() {
     complaintService
       .getAllComplaints()
       .then((data) => {
-        if (mounted) setComplaints(data);
+        if (mounted) {setComplaints(data);}
       })
       .catch(() => {})
       .finally(() => {
-        if (mounted) setLoading(false);
+        if (mounted) {setLoading(false);}
       });
 
     return () => {
@@ -150,7 +150,7 @@ export default function MyComplaintsPage() {
       {loading ? (
         <div className="py-20 text-center space-y-2">
           <p className="text-sm font-semibold text-[#183B66]">Loading citizen reports...</p>
-          <p className="text-xs text-[#718096]">Accessing Urbangurad municipal records.</p>
+          <p className="text-xs text-[#718096]">Accessing Urbanguard municipal records.</p>
         </div>
       ) : filtered.length === 0 ? (
         <div className="card-clean p-12 text-center space-y-3 bg-white border border-[#E5EAF0]">

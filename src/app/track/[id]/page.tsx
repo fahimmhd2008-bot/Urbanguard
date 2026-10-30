@@ -12,7 +12,7 @@ import {
   Share2,
   Check,
 } from 'lucide-react';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { TrackingTimeline } from '@/components/citizen/TrackingTimeline';
 import { StatusBadge } from '@/components/common/StatusBadge';
@@ -35,13 +35,13 @@ export default function ComplaintTrackingPage() {
       complaintService
         .getComplaintById(id)
         .then((found) => {
-          if (mounted) setComplaint(found);
+          if (mounted) {setComplaint(found);}
         })
         .catch(() => {
-          if (mounted) setComplaint(null);
+          if (mounted) {setComplaint(null);}
         })
         .finally(() => {
-          if (mounted) setLoading(false);
+          if (mounted) {setLoading(false);}
         });
     }
     return () => {
@@ -52,7 +52,7 @@ export default function ComplaintTrackingPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <p className="text-[#718096] text-sm">Loading incident details from Urbangurad...</p>
+        <p className="text-[#718096] text-sm">Loading incident details from Urbanguard...</p>
       </div>
     );
   }
@@ -165,7 +165,7 @@ export default function ComplaintTrackingPage() {
         <div className="p-4 sm:p-5 rounded-lg bg-[#EBF3FC] border border-[#D0E2F6] flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-[#3978C5] shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <h3 className="text-xs font-bold text-[#183B66]">Urbangurad Triage Summary</h3>
+            <h3 className="text-xs font-bold text-[#183B66]">Urbanguard Triage Summary</h3>
             <p className="text-xs text-[#263445] leading-relaxed">
               {complaint.ai_summary}
             </p>

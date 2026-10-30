@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { MapPin, Calendar, ArrowRight } from 'lucide-react';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { StatusBadge } from '../common/StatusBadge';
 import { PriorityBadge } from '../common/PriorityBadge';
 import { CategoryIcon } from '../common/CategoryIcon';

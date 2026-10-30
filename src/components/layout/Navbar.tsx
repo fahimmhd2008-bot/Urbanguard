@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import {
   Shield,
   PlusCircle,
-  FileSearch,
   LayoutDashboard,
   Menu,
   X,
@@ -15,7 +14,7 @@ import {
   LogIn,
 } from 'lucide-react';
 import { NotificationDropdown } from './NotificationDropdown';
-import { UserRole } from '@/types/civic';
+import type { UserRole } from '@/types/civic';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -24,7 +23,8 @@ export function Navbar() {
   const [showSignInModal, setShowSignInModal] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('urbangurad_current_role') as UserRole;
+    const saved = (localStorage.getItem('urbanguard_current_role') ||
+      localStorage.getItem('urbangurad_current_role')) as UserRole;
     if (saved) {
       setCurrentRole(saved);
     } else if (pathname.startsWith('/admin')) {
@@ -34,7 +34,7 @@ export function Navbar() {
 
   const toggleRole = (newRole: UserRole) => {
     setCurrentRole(newRole);
-    localStorage.setItem('urbangurad_current_role', newRole);
+    localStorage.setItem('urbanguard_current_role', newRole);
   };
 
   return (
@@ -42,14 +42,14 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-18">
           
-          {/* Urbangurad Brand Logo */}
+          {/* Urbanguard Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-lg bg-[#183B66] text-white flex items-center justify-center shadow-sm">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
               <span className="font-extrabold text-xl tracking-tight text-[#183B66]">
-                Urban<span className="text-[#3978C5]">gurad</span>
+                Urban<span className="text-[#3978C5]">guard</span>
               </span>
               <p className="text-[10px] text-[#718096] font-medium leading-none hidden sm:block">
                 Municipal Action Platform
@@ -233,7 +233,7 @@ export function Navbar() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-[#183B66]" />
-                <h3 className="font-bold text-[#183B66] text-base">Urbangurad Access</h3>
+                <h3 className="font-bold text-[#183B66] text-base">Urbanguard Access</h3>
               </div>
               <button
                 onClick={() => setShowSignInModal(false)}

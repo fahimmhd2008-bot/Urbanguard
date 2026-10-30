@@ -1,4 +1,4 @@
-import { ComplaintCategory } from '@/types/civic';
+import type { ComplaintCategory } from '@/types/civic';
 
 interface ClassificationResult {
   category: ComplaintCategory;

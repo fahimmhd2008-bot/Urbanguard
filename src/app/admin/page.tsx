@@ -14,13 +14,9 @@ import {
   Copy,
   ArrowRight,
   TrendingUp,
-  Shield,
-  Building2,
-  Settings,
-  BarChart3,
   RotateCcw,
 } from 'lucide-react';
-import { Complaint, AIActionBrief } from '@/types/civic';
+import type { Complaint, AIActionBrief } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { generateAIActionBrief } from '@/lib/ai/actionBrief';
 import { MetricCard } from '@/components/admin/MetricCard';
@@ -58,7 +54,7 @@ export default function AdminDashboardPage() {
         complaintService.getMetrics(),
       ]);
       setComplaints(data || []);
-      if (stats) setMetrics(stats);
+      if (stats) {setMetrics(stats);}
     } catch {
       // Continue with memory defaults
     } finally {
@@ -98,7 +94,7 @@ export default function AdminDashboardPage() {
             <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
               Municipal Operations
             </span>
-            <span className="text-xs text-[#718096]">• Urbangurad Command Center</span>
+            <span className="text-xs text-[#718096]">• Urbanguard Command Center</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#183B66] mt-1">
             Municipal Operations Dashboard

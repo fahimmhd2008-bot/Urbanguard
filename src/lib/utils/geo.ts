@@ -1,4 +1,4 @@
-import { Complaint, HotspotCluster, PriorityLevel } from '@/types/civic';
+import type { Complaint, HotspotCluster, PriorityLevel } from '@/types/civic';
 import { calculateDistanceMeters } from '../ai/duplicateDetector';
 
 export { calculateDistanceMeters };
@@ -15,14 +15,14 @@ export function identifyHotspots(complaints: Complaint[], clusterRadiusMeters = 
 
   for (let i = 0; i < validComplaints.length; i++) {
     const root = validComplaints[i];
-    if (visited.has(root.id)) continue;
+    if (visited.has(root.id)) {continue;}
 
     const group: Complaint[] = [root];
     visited.add(root.id);
 
     for (let j = i + 1; j < validComplaints.length; j++) {
       const candidate = validComplaints[j];
-      if (visited.has(candidate.id)) continue;
+      if (visited.has(candidate.id)) {continue;}
 
       const dist = calculateDistanceMeters(root.latitude, root.longitude, candidate.latitude, candidate.longitude);
       if (dist <= clusterRadiusMeters) {
@@ -93,8 +93,8 @@ export function identifyHotspots(complaints: Complaint[], clusterRadiusMeters = 
 
   // Sort clusters by severity (complaint count & priority)
   return clusters.sort((a, b) => {
-    if (a.risk_level === 'High' && b.risk_level !== 'High') return -1;
-    if (b.risk_level === 'High' && a.risk_level !== 'High') return 1;
+    if (a.risk_level === 'High' && b.risk_level !== 'High') {return -1;}
+    if (b.risk_level === 'High' && a.risk_level !== 'High') {return 1;}
     return b.complaint_count - a.complaint_count;
   });
 }

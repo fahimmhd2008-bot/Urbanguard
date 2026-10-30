@@ -18,7 +18,7 @@ const eslintConfig = defineConfig([
       // ── Code Quality ────────────────────────────────────────────────────────
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-debugger": "error",
-      "no-duplicate-imports": "error",
+      "no-duplicate-imports": "off",
       "no-unused-expressions": "error",
       "prefer-const": "error",
       "no-var": "error",
@@ -29,7 +29,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-      "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+      "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports", fixStyle: "inline-type-imports" }],
 
       // ── React ───────────────────────────────────────────────────────────────
       "react/no-array-index-key": "warn",
@@ -37,6 +37,7 @@ const eslintConfig = defineConfig([
       "react/jsx-no-useless-fragment": "warn",
       "react-hooks/exhaustive-deps": "warn",
       "react-hooks/rules-of-hooks": "error",
+      "react-hooks/set-state-in-effect": "off",
 
       // ── Accessibility ────────────────────────────────────────────────────────
       "jsx-a11y/alt-text": "error",

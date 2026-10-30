@@ -9,22 +9,15 @@ import {
   Search,
   ArrowRight,
   MapPin,
-  CheckCircle2,
-  Clock,
   Car,
   Droplets,
   Trash2,
   Zap,
   Building2,
   ShieldAlert,
-  SlidersHorizontal,
-  Layers,
-  Sparkles,
-  Users,
-  CheckCheck,
 } from 'lucide-react';
 import { complaintService } from '@/lib/data/complaintService';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { PriorityBadge } from '@/components/common/PriorityBadge';
 import { StatusBadge } from '@/components/common/StatusBadge';
 
@@ -46,7 +39,7 @@ export default function LandingPage() {
     complaintService
       .getMetrics()
       .then((res) => {
-        if (mounted && res) setMetrics(res);
+        if (mounted && res) {setMetrics(res);}
       })
       .catch(() => {});
 
@@ -238,14 +231,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. HOW URBANGURAD WORKS */}
+      {/* 2. HOW URBANGUARD WORKS */}
       <section id="how-it-works" className="space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <span className="text-xs font-bold text-[#3978C5] uppercase tracking-wider">
             Clear Four-Step Process
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#183B66]">
-            How Urbangurad Works
+            How Urbanguard Works
           </h2>
           <p className="text-sm text-[#718096]">
             Designed for transparency, fairness, and verifiable public outcomes from report to resolution.
@@ -269,7 +262,7 @@ export default function LandingPage() {
             </div>
             <h3 className="font-bold text-[#183B66] text-base">AI Triage & Prioritize</h3>
             <p className="text-xs text-[#718096] leading-relaxed">
-              Urbangurad analyzes safety risk, public impact, and detects duplicates to calculate an explainable priority score.
+              Urbanguard analyzes safety risk, public impact, and detects duplicates to calculate an explainable priority score.
             </p>
           </div>
 
@@ -357,7 +350,7 @@ export default function LandingPage() {
             How AI Helps Prioritize Complaints
           </h2>
           <p className="text-sm text-[#718096] leading-relaxed">
-            Rather than relying on arbitrary queues or manual sorting, Urbangurad calculates a transparent 0–100 priority score using four objective municipal factors:
+            Rather than relying on arbitrary queues or manual sorting, Urbanguard calculates a transparent 0–100 priority score using four objective municipal factors:
           </p>
         </div>
 

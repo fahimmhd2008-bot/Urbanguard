@@ -25,11 +25,11 @@ export function Footer() {
                 <Shield className="w-4 h-4 text-white" />
               </div>
               <span className="font-extrabold text-lg tracking-tight text-[#183B66]">
-                Urban<span className="text-[#3978C5]">gurad</span>
+                Urban<span className="text-[#3978C5]">guard</span>
               </span>
             </div>
             <p className="text-xs text-[#718096] max-w-sm leading-relaxed">
-              Urbangurad connects citizens with municipal departments through explainable AI prioritization, structured triage, and transparent milestone tracking.
+              Urbanguard connects citizens with municipal departments through explainable AI prioritization, structured triage, and transparent milestone tracking.
             </p>
             <div className="pt-2 flex items-center gap-2 text-xs text-[#263445]">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#EBF3FC] text-[#183B66] font-semibold text-[11px]">
@@ -57,7 +57,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/#how-it-works" className="hover:text-[#183B66] transition-colors">
-                  How Urbangurad Works
+                  How Urbanguard Works
                 </Link>
               </li>
               <li>
@@ -110,7 +110,7 @@ export function Footer() {
 
         {/* Bottom copyright */}
         <div className="mt-10 pt-6 border-t border-[#E5EAF0] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#718096]">
-          <p>© {new Date().getFullYear()} Urbangurad. All municipal public service rights reserved.</p>
+          <p>© {new Date().getFullYear()} Urbanguard. All municipal public service rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-[#183B66] cursor-pointer">Privacy Policy</span>
             <span className="hover:text-[#183B66] cursor-pointer">Public Terms of Service</span>

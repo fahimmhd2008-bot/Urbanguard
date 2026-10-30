@@ -13,7 +13,7 @@ import {
   Save,
   Users,
 } from 'lucide-react';
-import { Complaint, ComplaintStatus } from '@/types/civic';
+import type { Complaint, ComplaintStatus } from '@/types/civic';
 import { Modal } from '../common/Modal';
 import { StatusBadge } from '../common/StatusBadge';
 import { PriorityBadge } from '../common/PriorityBadge';
@@ -46,24 +46,35 @@ const ALLOWED_STATUS_FLOW: ComplaintStatus[] = [
 ];
 
 export function ComplaintDetailModal({ complaint, isOpen, onClose, onUpdate }: Props) {
-  if (!complaint) return null;
-
   // Status update state
-  const [targetStatus, setTargetStatus] = useState<ComplaintStatus>(complaint.status);
+  const [targetStatus, setTargetStatus] = useState<ComplaintStatus>(complaint?.status || 'SUBMITTED');
   const [publicMessage, setPublicMessage] = useState('');
   const [internalNote, setInternalNote] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
 
   // Department assignment state
-  const [selectedDept, setSelectedDept] = useState(complaint.assigned_department || DEPARTMENTS[0]);
-  const [assignedLead, setAssignedLead] = useState(complaint.assigned_to || '');
+  const [selectedDept, setSelectedDept] = useState(complaint?.assigned_department || DEPARTMENTS[0]);
+  const [assignedLead, setAssignedLead] = useState(complaint?.assigned_to || '');
   const [assigning, setAssigning] = useState(false);
 
   // Priority override state
   const [showOverride, setShowOverride] = useState(false);
-  const [overrideScore, setOverrideScore] = useState(complaint.priority_score);
+  const [overrideScore, setOverrideScore] = useState(complaint?.priority_score || 0);
   const [overrideReason, setOverrideReason] = useState('');
   const [savingOverride, setSavingOverride] = useState(false);
+
+  useEffect(() => {
+    if (complaint) {
+      setTargetStatus(complaint.status);
+      setSelectedDept(complaint.assigned_department || DEPARTMENTS[0]);
+      setAssignedLead(complaint.assigned_to || '');
+      setOverrideScore(complaint.priority_score);
+    }
+  }, [complaint]);
+
+  if (!complaint) {
+    return null;
+  }
 
   const aiAnalysis = complaint.ai_analysis;
   const priorityBreakdown = aiAnalysis?.priority_breakdown;
@@ -102,7 +113,7 @@ export function ComplaintDetailModal({ complaint, isOpen, onClose, onUpdate }: P
         selectedDept,
         assignedLead,
         'Admin Supervisor',
-        'Assigned via Urbangurad Admin Workbench'
+        'Assigned via Urbanguard Admin Workbench'
       );
       onUpdate();
     } finally {
@@ -203,10 +214,10 @@ export function ComplaintDetailModal({ complaint, isOpen, onClose, onUpdate }: P
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-[#183B66] font-bold text-sm">
               <Sparkles className="w-4 h-4 text-[#3978C5]" />
-              <span>Urbangurad Decision Engine Assessment</span>
+              <span>Urbanguard Decision Engine Assessment</span>
             </div>
             <span className="text-[10px] font-mono text-[#718096]">
-              {aiAnalysis?.model_information || 'Urbangurad-NLP-v2'}
+              {aiAnalysis?.model_information || 'Urbanguard-NLP-v2'}
             </span>
           </div>
 
@@ -403,8 +414,7 @@ export function ComplaintDetailModal({ complaint, isOpen, onClose, onUpdate }: P
                 onChange={(e) => setAssignedLead(e.target.value)}
                 placeholder="e.g. Eng. Marcus Vance (Team 2)"
                 className="w-full px-3 py-2 rounded-md bg-white border border-[#E5EAF0] text-xs text-[#263445] focus:outline-none focus:border-[#3978C5]"
-              >
-              </input>
+               />
             </div>
 
             <button

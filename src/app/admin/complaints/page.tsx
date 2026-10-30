@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, PlusCircle } from 'lucide-react';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 import { complaintService } from '@/lib/data/complaintService';
 import { ComplaintTable } from '@/components/admin/ComplaintTable';
 import { ComplaintDetailModal } from '@/components/admin/ComplaintDetailModal';

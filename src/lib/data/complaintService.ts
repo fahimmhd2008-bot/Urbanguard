@@ -1,4 +1,4 @@
-import {
+import type {
   Complaint,
   ComplaintCategory,
   ComplaintStatus,
@@ -64,7 +64,7 @@ class ComplaintService {
   }
 
   private initStorage() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {return;}
 
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -93,7 +93,7 @@ class ComplaintService {
   }
 
   private save() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined') {return;}
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.memoryComplaints));
       localStorage.setItem(HISTORY_KEY, JSON.stringify(this.memoryHistory));
@@ -106,8 +106,8 @@ class ComplaintService {
   private supabaseAvailable: boolean | null = null;
 
   async isSupabaseConnected(): Promise<boolean> {
-    if (!isSupabaseConfigured) return false;
-    if (this.supabaseAvailable !== null) return this.supabaseAvailable;
+    if (!isSupabaseConfigured) {return false;}
+    if (this.supabaseAvailable !== null) {return this.supabaseAvailable;}
 
     const supabase = getSupabaseClient();
     if (!supabase) {
@@ -418,7 +418,7 @@ class ComplaintService {
     internalNote?: string
   ): Promise<Complaint | null> {
     const comp = this.memoryComplaints.find((c) => c.id === id);
-    if (!comp) return null;
+    if (!comp) {return null;}
 
     const oldStatus = comp.status;
     const now = new Date().toISOString();
@@ -503,7 +503,7 @@ class ComplaintService {
     note?: string
   ): Promise<Complaint | null> {
     const comp = this.memoryComplaints.find((c) => c.id === id);
-    if (!comp) return null;
+    if (!comp) {return null;}
 
     comp.assigned_department = department;
     comp.assigned_to = assignedTo;
@@ -524,7 +524,7 @@ class ComplaintService {
       created_at: new Date().toISOString(),
     };
 
-    if (!this.memoryHistory[id]) this.memoryHistory[id] = [];
+    if (!this.memoryHistory[id]) {this.memoryHistory[id] = [];}
     this.memoryHistory[id].push(historyEntry);
 
     const notif: NotificationItem = {
@@ -552,12 +552,12 @@ class ComplaintService {
     adminName: string
   ): Promise<Complaint | null> {
     const comp = this.memoryComplaints.find((c) => c.id === id);
-    if (!comp) return null;
+    if (!comp) {return null;}
 
     let level: PriorityLevel = 'Low';
-    if (newScore >= 80) level = 'Critical';
-    else if (newScore >= 60) level = 'High';
-    else if (newScore >= 35) level = 'Medium';
+    if (newScore >= 80) {level = 'Critical';}
+    else if (newScore >= 60) {level = 'High';}
+    else if (newScore >= 35) {level = 'Medium';}
 
     comp.priority_score = newScore;
     comp.priority_level = level;
@@ -575,7 +575,7 @@ class ComplaintService {
 
   // --- NOTIFICATIONS ---
   async getNotifications(userId?: string): Promise<NotificationItem[]> {
-    if (!userId) return this.memoryNotifications;
+    if (!userId) {return this.memoryNotifications;}
     return this.memoryNotifications.filter((n) => n.user_id === userId || n.user_id === 'user-citizen-current');
   }
 

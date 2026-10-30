@@ -28,8 +28,8 @@ function hasAccessibleLabel(el: AccessibleElement): boolean {
 }
 
 function isFocusable(el: AccessibleElement): boolean {
-  if (isInteractiveElement(el)) return true;
-  if (el.tabIndex !== undefined && el.tabIndex >= 0) return true;
+  if (isInteractiveElement(el)) {return true;}
+  if (el.tabIndex !== undefined && el.tabIndex >= 0) {return true;}
   return false;
 }
 
@@ -69,11 +69,11 @@ interface PageStructure {
 
 function validatePageStructure(structure: PageStructure): { valid: boolean; warnings: string[] } {
   const warnings: string[] = [];
-  if (!structure.hasNav) warnings.push('Page should have a <nav> element');
-  if (!structure.hasMain) warnings.push('Page should have a <main> element');
-  if (!structure.hasFooter) warnings.push('Page should have a <footer> element');
-  if (!structure.hasH1) warnings.push('Page should have at least one <h1>');
-  if (structure.h1Count > 1) warnings.push('Page should have only one <h1> for SEO');
+  if (!structure.hasNav) {warnings.push('Page should have a <nav> element');}
+  if (!structure.hasMain) {warnings.push('Page should have a <main> element');}
+  if (!structure.hasFooter) {warnings.push('Page should have a <footer> element');}
+  if (!structure.hasH1) {warnings.push('Page should have at least one <h1>');}
+  if (structure.h1Count > 1) {warnings.push('Page should have only one <h1> for SEO');}
   return { valid: warnings.length === 0, warnings };
 }
 
@@ -97,7 +97,7 @@ function getRelativeLuminance(r: number, g: number, b: number): number {
 function getContrastRatio(hex1: string, hex2: string): number {
   const c1 = hexToRgb(hex1);
   const c2 = hexToRgb(hex2);
-  if (!c1 || !c2) return 0;
+  if (!c1 || !c2) {return 0;}
   const l1 = getRelativeLuminance(c1.r, c1.g, c1.b);
   const l2 = getRelativeLuminance(c2.r, c2.g, c2.b);
   const lighter = Math.max(l1, l2);

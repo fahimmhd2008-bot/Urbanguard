@@ -1,4 +1,4 @@
-import { PriorityBreakdown, PriorityLevel } from '@/types/civic';
+import type { PriorityBreakdown, PriorityLevel } from '@/types/civic';
 
 interface ScoringInput {
   title: string;

@@ -22,7 +22,7 @@ export function Modal({
 }: Props) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {onClose();}
     };
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -34,7 +34,7 @@ export function Modal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   const widthClasses = {
     sm: 'max-w-sm',

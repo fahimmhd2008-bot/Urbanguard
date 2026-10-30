@@ -10,7 +10,7 @@ import {
   AlertCircle,
   Building2,
 } from 'lucide-react';
-import { ComplaintStatus, ComplaintStatusHistory } from '@/types/civic';
+import type { ComplaintStatus, ComplaintStatusHistory } from '@/types/civic';
 import { formatDate } from '@/lib/utils/formatters';
 
 interface Props {

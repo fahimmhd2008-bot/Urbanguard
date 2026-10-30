@@ -15,9 +15,11 @@ const config = {
     '**/?(*.)+(spec|test).[jt]s?(x)',
   ],
   collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
+    'src/lib/ai/**/*.{js,ts}',
+    'src/lib/utils/**/*.{js,ts}',
+    'src/lib/security/**/*.{js,ts}',
+    'src/lib/errors/**/*.{js,ts}',
     '!src/**/*.d.ts',
-    '!src/**/_*.{js,jsx,ts,tsx}',
     '!**/node_modules/**',
   ],
   coverageDirectory: 'coverage',

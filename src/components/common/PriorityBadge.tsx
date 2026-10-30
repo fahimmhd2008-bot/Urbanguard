@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PriorityLevel } from '@/types/civic';
+import type { PriorityLevel } from '@/types/civic';
 import { getPriorityStyles } from '@/lib/utils/formatters';
 
 interface Props {

@@ -32,7 +32,7 @@ export function generateComplaintSummary(input: SummarizerInput): StructuredSumm
 
   if (descLower.includes('home') || descLower.includes('house') || descLower.includes('resident')) {
     impact = 'Residential homes and neighborhood families';
-  } else if (descLower.includes('traffic') || descLower.includes('lane') || descLower.includes('bus') || descLower.includes('commuter')) {
+  } else if (descLower.includes('traffic') || descLower.includes('lane') || /\bbus\b/.test(descLower) || descLower.includes('commuter')) {
     impact = 'Vehicular traffic, commuters, and transit flow';
   } else if (descLower.includes('pedestrian') || descLower.includes('walkway') || descLower.includes('footpath') || descLower.includes('crosswalk')) {
     impact = 'Pedestrians and vulnerable sidewalk users';

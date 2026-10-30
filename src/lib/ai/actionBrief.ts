@@ -1,4 +1,4 @@
-import { AIActionBrief, Complaint } from '@/types/civic';
+import type { AIActionBrief, Complaint } from '@/types/civic';
 
 export function generateAIActionBrief(
   targetAreaOrCategory: string,

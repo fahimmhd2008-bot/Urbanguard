@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import type {
+  LucideIcon} from 'lucide-react';
 import {
   Car,
   Droplets,
@@ -8,10 +10,9 @@ import {
   Zap,
   Building2,
   ShieldAlert,
-  HelpCircle,
-  LucideIcon,
+  HelpCircle
 } from 'lucide-react';
-import { ComplaintCategory } from '@/types/civic';
+import type { ComplaintCategory } from '@/types/civic';
 
 interface Props {
   category: ComplaintCategory;

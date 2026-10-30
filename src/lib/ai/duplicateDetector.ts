@@ -1,4 +1,4 @@
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 
 export interface DuplicateCandidate {
   id: string;
@@ -44,7 +44,7 @@ function tokenize(text: string): Set<string> {
 function computeTextSimilarity(textA: string, textB: string): number {
   const setA = tokenize(textA);
   const setB = tokenize(textB);
-  if (setA.size === 0 || setB.size === 0) return 0;
+  if (setA.size === 0 || setB.size === 0) {return 0;}
 
   let intersectionCount = 0;
   for (const item of setA) {
@@ -77,7 +77,7 @@ export function detectDuplicates(
 
   for (const comp of existingComplaints) {
     // Skip self
-    if (target.id && comp.id === target.id) continue;
+    if (target.id && comp.id === target.id) {continue;}
 
     // Geographic distance
     const distanceMeters = calculateDistanceMeters(
@@ -100,18 +100,18 @@ export function detectDuplicates(
 
     // Multi-factor weighted score calculation
     let geoScore = 0;
-    if (distanceMeters <= 50) geoScore = 40;
-    else if (distanceMeters <= 200) geoScore = 32;
-    else if (distanceMeters <= 500) geoScore = 20;
-    else if (distanceMeters <= 1000) geoScore = 10;
+    if (distanceMeters <= 50) {geoScore = 40;}
+    else if (distanceMeters <= 200) {geoScore = 32;}
+    else if (distanceMeters <= 500) {geoScore = 20;}
+    else if (distanceMeters <= 1000) {geoScore = 10;}
 
     const textScore = Math.round(textSim * 40); // 0 - 40
     const catScore = categoryMatch ? 15 : 0; // 0 - 15
 
     let timeScore = 0;
-    if (timeDiffHours <= 24) timeScore = 10;
-    else if (timeDiffHours <= 72) timeScore = 6;
-    else if (timeDiffHours <= 168) timeScore = 3;
+    if (timeDiffHours <= 24) {timeScore = 10;}
+    else if (timeDiffHours <= 72) {timeScore = 6;}
+    else if (timeDiffHours <= 168) {timeScore = 3;}
 
     const totalSimilarity = Math.min(100, geoScore + textScore + catScore + timeScore);
 

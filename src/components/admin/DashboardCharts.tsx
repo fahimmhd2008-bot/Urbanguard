@@ -13,7 +13,7 @@ import {
   Cell,
   Legend,
 } from 'recharts';
-import { Complaint } from '@/types/civic';
+import type { Complaint } from '@/types/civic';
 
 interface Props {
   complaints: Complaint[];

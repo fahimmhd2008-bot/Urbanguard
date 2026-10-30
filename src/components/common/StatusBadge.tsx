@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ComplaintStatus } from '@/types/civic';
+import type { ComplaintStatus } from '@/types/civic';
 import { getStatusStyles } from '@/lib/utils/formatters';
 
 interface Props {

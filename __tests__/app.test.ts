@@ -30,19 +30,19 @@ const PRIORITY_WEIGHTS: Record<string, number> = {
 
 function classifyComplaint(text: string): string {
   const lower = text.toLowerCase();
-  if (lower.includes('pothole') || lower.includes('road') || lower.includes('pavement')) return 'Roads';
-  if (lower.includes('water') || lower.includes('drain') || lower.includes('flood')) return 'Water and drainage';
-  if (lower.includes('garbage') || lower.includes('trash') || lower.includes('waste')) return 'Waste management';
-  if (lower.includes('light') || lower.includes('power') || lower.includes('electric')) return 'Electricity and streetlights';
-  if (lower.includes('safety') || lower.includes('crime') || lower.includes('dangerous')) return 'Public safety';
+  if (lower.includes('pothole') || lower.includes('road') || lower.includes('pavement')) {return 'Roads';}
+  if (lower.includes('water') || lower.includes('drain') || lower.includes('flood')) {return 'Water and drainage';}
+  if (lower.includes('garbage') || lower.includes('trash') || lower.includes('waste')) {return 'Waste management';}
+  if (lower.includes('light') || lower.includes('power') || lower.includes('electric')) {return 'Electricity and streetlights';}
+  if (lower.includes('safety') || lower.includes('crime') || lower.includes('dangerous')) {return 'Public safety';}
   return 'Other';
 }
 
 function estimatePriority(category: string, keywords: string[]): string {
   const lowKeywords = keywords.map(k => k.toLowerCase());
-  if (lowKeywords.some(k => ['urgent', 'critical', 'emergency', 'dangerous'].includes(k))) return 'Critical';
-  if (category === 'Public safety') return 'High';
-  if (['Roads', 'Water and drainage'].includes(category)) return 'Medium';
+  if (lowKeywords.some(k => ['urgent', 'critical', 'emergency', 'dangerous'].includes(k))) {return 'Critical';}
+  if (category === 'Public safety') {return 'High';}
+  if (['Roads', 'Water and drainage'].includes(category)) {return 'Medium';}
   return 'Low';
 }
 
