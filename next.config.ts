@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  turbopack: {},
   webpack: (config) => {
     // Leaflet relies on browser globals - mark it as client-side only
     config.resolve = {
