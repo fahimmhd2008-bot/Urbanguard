@@ -454,7 +454,7 @@ export default function LandingPage() {
                     <span className="font-mono text-xs font-bold text-slate-400">
                       {c.reference_number}
                     </span>
-                    <PriorityBadge priority={c.priority} score={c.priority_score} />
+                    <PriorityBadge level={c.priority_level} score={c.priority_score} />
                   </div>
                   <h3 className="font-bold text-white text-sm line-clamp-1">{c.title}</h3>
                   <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
@@ -462,7 +462,7 @@ export default function LandingPage() {
                   </p>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 pt-1">
                     <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                    <span className="truncate">{c.location_address}</span>
+                    <span className="truncate">{c.location_name}</span>
                   </div>
                 </div>
 

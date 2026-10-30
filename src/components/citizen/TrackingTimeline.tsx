@@ -141,15 +141,19 @@ export function TrackingTimeline({
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white uppercase tracking-wider text-[11px]">
-                      {log.to_status}
+                      {log.new_status}
                     </span>
-                    {log.changed_by_name && (
+                    {log.updated_by && (
                       <span className="text-slate-400 text-[11px]">
-                        by <strong className="text-slate-300 font-medium">{log.changed_by_name}</strong>
+                        by <strong className="text-slate-300 font-medium">{log.updated_by}</strong>
                       </span>
                     )}
                   </div>
-                  {log.notes && <p className="text-slate-400 text-xs leading-relaxed">{log.notes}</p>}
+                  {(log.public_message || log.internal_note) && (
+                    <p className="text-slate-400 text-xs leading-relaxed">
+                      {log.public_message || log.internal_note}
+                    </p>
+                  )}
                 </div>
                 <span className="text-[11px] text-slate-500 font-mono shrink-0">
                   {formatDate(log.created_at)}
