@@ -103,21 +103,74 @@ class ComplaintService {
     }
   }
 
+  private supabaseAvailable: boolean | null = null;
+
+  async isSupabaseConnected(): Promise<boolean> {
+    if (!isSupabaseConfigured) return false;
+    if (this.supabaseAvailable !== null) return this.supabaseAvailable;
+
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      this.supabaseAvailable = false;
+      return false;
+    }
+
+    try {
+      const { error } = await supabase.from('complaints').select('id').limit(1);
+      if (error) {
+        if (error.code === 'PGRST205' || (error as any).status === 404) {
+          this.supabaseAvailable = false;
+          return false;
+        }
+      }
+      this.supabaseAvailable = !error;
+      return this.supabaseAvailable;
+    } catch {
+      this.supabaseAvailable = false;
+      return false;
+    }
+  }
+
   // --- COMPLAINTS RETRIEVAL ---
   async getAllComplaints(): Promise<Complaint[]> {
-    const supabase = getSupabaseClient();
-    if (supabase && isSupabaseConfigured) {
+    // When running in the browser, route through the local Next.js API route to prevent
+    // direct unhandled 404 network warnings if remote tables are not yet migrated
+    if (typeof window !== 'undefined') {
       try {
-        const { data, error } = await supabase
-          .from('complaints')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (!error && data && data.length > 0) {
-          return data as Complaint[];
+        const res = await fetch('/api/complaints');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+            this.memoryComplaints = json.data;
+            return json.data;
+          }
         }
-      } catch (err) {
-        console.warn('Supabase fetch failed, using local store:', err);
+      } catch {
+        // Fall through to local memory
+      }
+
+      return [...this.memoryComplaints].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    }
+
+    // Server-side retrieval: safely query Supabase only if connected and verified
+    const connected = await this.isSupabaseConnected();
+    if (connected) {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from('complaints')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data && data.length > 0) {
+            return data as Complaint[];
+          }
+        } catch (err) {
+          console.warn('[CivicAI] Supabase fetch error, fallback to local store:', err);
+        }
       }
     }
 
@@ -132,32 +185,46 @@ class ComplaintService {
   }
 
   async getComplaintById(id: string): Promise<Complaint | null> {
-    const supabase = getSupabaseClient();
-    if (supabase && isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase
-          .from('complaints')
-          .select('*')
-          .eq('id', id)
-          .single();
+    const found = this.memoryComplaints.find((c) => c.id === id || c.reference_number === id);
+    if (found) {
+      const copy = { ...found };
+      copy.status_history = this.memoryHistory[found.id] || [];
+      return copy;
+    }
 
-        if (!error && data) {
-          const comp = data as Complaint;
-          // Attach history
-          comp.status_history = await this.getStatusHistory(id);
-          return comp;
-        }
-      } catch (err) {
-        console.warn('Supabase fetch by id failed:', err);
+    if (typeof window !== 'undefined') {
+      await this.getAllComplaints();
+      const refound = this.memoryComplaints.find((c) => c.id === id || c.reference_number === id);
+      if (refound) {
+        const copy = { ...refound };
+        copy.status_history = this.memoryHistory[refound.id] || [];
+        return copy;
       }
     }
 
-    const found = this.memoryComplaints.find((c) => c.id === id || c.reference_number === id);
-    if (!found) return null;
+    const connected = await this.isSupabaseConnected();
+    if (connected) {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from('complaints')
+            .select('*')
+            .or(`id.eq.${id},reference_number.eq.${id}`)
+            .single();
 
-    const copy = { ...found };
-    copy.status_history = this.memoryHistory[found.id] || [];
-    return copy;
+          if (!error && data) {
+            const comp = data as Complaint;
+            comp.status_history = await this.getStatusHistory(id);
+            return comp;
+          }
+        } catch (err) {
+          console.warn('[CivicAI] Supabase fetch by id failed:', err);
+        }
+      }
+    }
+
+    return null;
   }
 
   // --- SUBMIT COMPLAINT WITH FULL AI PIPELINE ---
@@ -301,32 +368,42 @@ class ComplaintService {
     this.memoryNotifications.unshift(notif);
     this.save();
 
-    // Sync to Supabase if configured
-    const supabase = getSupabaseClient();
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase.from('complaints').insert({
-          id: newComplaint.id,
-          reference_number: newComplaint.reference_number,
-          user_id: newComplaint.user_id,
-          title: newComplaint.title,
-          description: newComplaint.description,
-          category: newComplaint.category,
-          location_name: newComplaint.location_name,
-          latitude: newComplaint.latitude,
-          longitude: newComplaint.longitude,
-          image_url: newComplaint.image_url,
-          status: newComplaint.status,
-          priority_score: newComplaint.priority_score,
-          priority_level: newComplaint.priority_level,
-          ai_summary: newComplaint.ai_summary,
-          assigned_department: newComplaint.assigned_department,
-          created_at: newComplaint.created_at,
-          updated_at: newComplaint.updated_at,
-        });
-      } catch (err) {
-        console.warn('Failed to insert into Supabase:', err);
+    // Sync to Supabase if configured and table exists
+    const connected = await this.isSupabaseConnected();
+    if (connected) {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        try {
+          await supabase.from('complaints').insert({
+            id: newComplaint.id,
+            reference_number: newComplaint.reference_number,
+            user_id: newComplaint.user_id,
+            title: newComplaint.title,
+            description: newComplaint.description,
+            category: newComplaint.category,
+            location_name: newComplaint.location_name,
+            latitude: newComplaint.latitude,
+            longitude: newComplaint.longitude,
+            image_url: newComplaint.image_url,
+            status: newComplaint.status,
+            priority_score: newComplaint.priority_score,
+            priority_level: newComplaint.priority_level,
+            ai_summary: newComplaint.ai_summary,
+            assigned_department: newComplaint.assigned_department,
+            created_at: newComplaint.created_at,
+            updated_at: newComplaint.updated_at,
+          });
+        } catch (err) {
+          console.warn('[CivicAI] Supabase insert failed:', err);
+        }
       }
+    } else if (typeof window !== 'undefined') {
+      // In browser, notify server API in background
+      fetch('/api/complaints', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      }).catch(() => {});
     }
 
     return newComplaint;
@@ -384,30 +461,33 @@ class ComplaintService {
     this.memoryNotifications.unshift(notif);
     this.save();
 
-    // Sync to Supabase
-    const supabase = getSupabaseClient();
-    if (supabase && isSupabaseConfigured) {
-      try {
-        await supabase
-          .from('complaints')
-          .update({
-            status: newStatus,
-            updated_at: now,
-            resolved_at: comp.resolved_at || null,
-          })
-          .eq('id', id);
+    // Sync to Supabase if configured and table exists
+    const connected = await this.isSupabaseConnected();
+    if (connected) {
+      const supabase = getSupabaseClient();
+      if (supabase) {
+        try {
+          await supabase
+            .from('complaints')
+            .update({
+              status: newStatus,
+              updated_at: now,
+              resolved_at: comp.resolved_at || null,
+            })
+            .eq('id', id);
 
-        await supabase.from('complaint_status_history').insert({
-          complaint_id: id,
-          old_status: oldStatus,
-          new_status: newStatus,
-          updated_by: updatedBy,
-          public_message: historyEntry.public_message,
-          internal_note: internalNote || null,
-          created_at: now,
-        });
-      } catch (err) {
-        console.warn('Supabase status update failed:', err);
+          await supabase.from('complaint_status_history').insert({
+            complaint_id: id,
+            old_status: oldStatus,
+            new_status: newStatus,
+            updated_by: updatedBy,
+            public_message: historyEntry.public_message,
+            internal_note: internalNote || null,
+            created_at: now,
+          });
+        } catch (err) {
+          console.warn('[CivicAI] Supabase status update failed:', err);
+        }
       }
     }
 
